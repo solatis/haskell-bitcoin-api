@@ -27,12 +27,20 @@ library
   default-language:    Haskell2010
 
   exposed-modules:     Network.Bitcoin.Client
-  
+                       Network.Bitcoin.Types
+                       Network.Bitcoin.Rpc.Misc
+
+  other-modules:       Network.Bitcoin.Internal
+                         
   build-depends:       base                     >= 4.3          && < 5
                      , text
                      , bytestring
-                     , wreq
                      , binary
+
+                     , aeson
+                     , unordered-containers
+                     , wreq
+                     , lens
 
                      , bitcoin-tx
                      , bitcoin-script
@@ -52,6 +60,8 @@ test-suite test-suite
                      , hspec
 
                      , bytestring
+                     , text
+                     
                      , bitcoin-rpc
 
 source-repository head
