@@ -1,11 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell   #-}
 
 module Network.Bitcoin.Rpc.Misc where
 
 import Control.Monad (mzero)
-import qualified Data.Text                as T
-
 import Control.Applicative ((<$>), (<*>))
+import Control.Lens.TH (makeLenses)
+
+import qualified Data.Text                as T
 import Data.Aeson
 import Data.Aeson.Types ( emptyArray )
 
@@ -13,52 +15,55 @@ import qualified Network.Bitcoin.Internal as I
 import qualified Network.Bitcoin.Types    as T
 
 data BitcoinInfo = BitcoinInfo {
+
   -- | What version of bitcoind are we running?
-  bitcoinVersion :: Integer,
+  _bitcoinVersion :: Integer,
 
   -- | What is bitcoind's current protocol number?
-  protocolVersion :: Integer,
+  _protocolVersion :: Integer,
 
   -- | What version is the wallet?
-  walletVersion :: Integer,
+  _walletVersion :: Integer,
 
   -- | How much money is currently in the wallet?
-  balance :: Integer,
+  _balance :: Integer,
 
   -- | The number of blocks in our chain.
-  numBlocks :: Integer,
+  _numBlocks :: Integer,
 
   -- | How many peers are we connected to?
-  numConnections :: Integer,
+  _numConnections :: Integer,
 
   -- | A blank string if we're not using a proxy.
-  proxy :: T.Text,
+  _proxy :: T.Text,
 
   -- | The difficulty multiplier for bitcoin mining operations.
-  generationDifficulty :: Double,
+  _generationDifficulty :: Double,
 
   -- | Are we on the test network (as opposed to the primary
   --   bitcoin network)?
-  onTestNetwork :: Bool,
+  _onTestNetwork :: Bool,
 
   -- | The timestamp of the oldest key in the key pool.
-  keyPoolOldest :: Integer,
+  _keyPoolOldest :: Integer,
 
   -- | The size of the key pool.
-  keyPoolSize :: Integer,
+  _keyPoolSize :: Integer,
 
   -- | How much do we currently pay as a transaction fee?
-  transactionFeePaid :: Integer,
+  _transactionFeePaid :: Integer,
 
   -- | If the wallet is unlocked, the number of seconds until a
   --   re-lock is needed.
-  unlockedUntil :: Maybe Integer,
+  _unlockedUntil :: Maybe Integer,
 
   -- | Any alerts will show up here. This should normally be an
   --   empty string.
-  bitcoindErrors :: T.Text
+  _bitcoindErrors :: T.Text
 
   } deriving ( Show )
+
+makeLenses ''BitcoinInfo
 
 instance FromJSON BitcoinInfo where
   parseJSON (Object o) =
