@@ -27,6 +27,17 @@ before_install:
 
  - cabal install hlint 
 
+# Installing bitcoind and bitcoin-cli from source
+ - travis_retry sudo apt-get install -y build-essential libssl-dev libboost-all-dev libdb4.8-dev libdb4.8++-dev libgtk2.0-dev
+
+ - travis_retry wget https://bitcoin.org/bin/bitcoin-core-0.10.0/bitcoin-0.10.0.tar.gz
+ - tar -xzf bitcoin-0.10.0.tar.gz && cd bitcoin-0.10.0 && ./configure --disable-tests --with-gui=no && make && sudo make install && cd ..
+ - rm -rf bitcoin-0.10.0
+ - which bitcoind
+ - which bitcoin-cli
+ 
+ - bitcoind -regtest -rpcuser=user -rpcpassword=pass -daemon
+
 # Install hpc-coveralls
  - travis_retry cabal sandbox init
  - cabal install hpc-coveralls -j --bindir=$HOME/.cabal/bin/ --constraint='aeson >= 0.7'
