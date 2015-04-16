@@ -1,16 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE FlexibleContexts #-}
 
 module Network.Bitcoin.Internal where
 
-import Control.Applicative ((<$>), (<|>))
+import Control.Applicative ((<$>))
 import           Control.Lens          ((^.))
 import           Control.Monad         (mzero)
 import qualified Network.Wreq          as W
 import qualified Network.Wreq.Session  as WS
 
-import Data.Maybe (fromJust)
 import           Data.Aeson
 import qualified Data.HashMap.Strict   as HM
 
@@ -26,11 +23,13 @@ instance FromJSON a => FromJSON (RpcResult a) where
     let checkError :: Bool
         checkError = HM.member "error" o && HM.lookup "error" o /= Just Null
 
-        parseResult hasError object
-          | hasError  = RpcResultError <$> object .: "error"
-          | otherwise = RpcResultOk    <$> object .: "result"
+        parseResult hasError o'
+          | hasError  = RpcResultError <$> o' .: "error"
+          | otherwise = RpcResultOk    <$> o' .: "result"
 
     in parseResult checkError o
+
+  parseJSON _ = mzero
 
 call :: ( ToJSON a
         , FromJSON b
