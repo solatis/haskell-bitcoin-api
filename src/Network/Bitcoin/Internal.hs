@@ -24,7 +24,7 @@ data RpcResult a = RpcResultError String
 instance FromJSON a => FromJSON (RpcResult a) where
   parseJSON (Object o) =
     let checkError :: Bool
-        checkError = (HM.member "error" o == True) && (HM.lookup "error" o /= (Just Null))
+        checkError = HM.member "error" o && HM.lookup "error" o /= Just Null
 
         parseResult hasError object
           | hasError  = RpcResultError <$> object .: "error"

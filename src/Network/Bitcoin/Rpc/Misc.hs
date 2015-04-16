@@ -61,7 +61,7 @@ data BitcoinInfo = BitcoinInfo {
   } deriving ( Show )
 
 instance FromJSON BitcoinInfo where
-  parseJSON (Object o) = do
+  parseJSON (Object o) =
     BitcoinInfo
       <$> o .:  "version"
       <*> o .:  "protocolversion"
