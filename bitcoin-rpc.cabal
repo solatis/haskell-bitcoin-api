@@ -57,11 +57,14 @@ test-suite test-suite
                        Main
 
   build-depends:       base                     >= 4.3          && < 5
-                     , hspec
-
                      , bytestring
                      , text
+
+                     , http-client
+                     , wreq
+                     , lens
                      
+                     , hspec
                      , bitcoin-rpc
 
 source-repository head
