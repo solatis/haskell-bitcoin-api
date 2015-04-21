@@ -44,6 +44,9 @@ before_install:
  - cabal install hpc-coveralls -j --bindir=$HOME/.cabal/bin/ --constraint='aeson >= 0.7'
  - cabal sandbox delete
 
+# Bootstrap our Bitcoin wallet with a few generated coints
+ - bitcoin-cli -regtest -rpcuser=user -rpcpassword=pass setgenerate true 101
+
 install:
  - cabal --version
  - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
