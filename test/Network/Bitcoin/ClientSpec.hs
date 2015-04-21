@@ -10,6 +10,7 @@ import           Network.Wreq.Lens (statusCode)
 import           Control.Lens ((^.))
 import           Network.Bitcoin.Client
 import qualified Network.Bitcoin.Rpc.Misc as Misc
+import qualified Network.Bitcoin.Rpc.Wallet as Wallet
 import           Test.Hspec
 
 testClient :: (Client -> IO a) -> IO a
@@ -34,3 +35,9 @@ spec = do
 
      r ^. Misc.bitcoinVersion `shouldBe` 100000
      r ^. Misc.bitcoindErrors `shouldBe` (T.pack "")
+
+  describe "when testing wallet functions" $ do
+   it "should be able list unspent transactions" $ do
+     r <- testClient Wallet.listUnspent
+
+     length r `shouldSatisfy` (>= 1)

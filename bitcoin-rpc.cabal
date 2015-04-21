@@ -28,7 +28,10 @@ library
 
   exposed-modules:     Network.Bitcoin.Client
                        Network.Bitcoin.Types
+                       Network.Bitcoin.Rpc.Types
+                       Network.Bitcoin.Rpc.Types.UnspentTransaction
                        Network.Bitcoin.Rpc.Misc
+                       Network.Bitcoin.Rpc.Wallet
 
   other-modules:       Network.Bitcoin.Internal
                          
@@ -36,6 +39,7 @@ library
                      , text
                      , bytestring
                      , binary
+                     , hexstring
 
                      , aeson
                      , unordered-containers

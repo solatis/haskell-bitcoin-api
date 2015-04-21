@@ -45,6 +45,7 @@ call client method params =
                        , "id"      .= (1 :: Int)]
 
       call' = do
+        putStrLn ("Now sending JSON command: " ++ show (encode command))
         r <- W.asJSON =<< WS.postWith (T.clientOpts client) (T.clientSession client) (T.clientUrl client) command
         return (r ^. W.responseBody)
 
