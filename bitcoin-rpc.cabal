@@ -1,6 +1,6 @@
 name: bitcoin-rpc
 category: Network, Finance
-version: 0.11.0
+version: 0.9.0
 license: MIT
 license-file: LICENSE
 copyright: (c) 2015 Leon Mergen
@@ -31,6 +31,7 @@ library
                        Network.Bitcoin.Rpc.Types
                        Network.Bitcoin.Rpc.Types.UnspentTransaction
                        Network.Bitcoin.Rpc.Misc
+                       Network.Bitcoin.Rpc.Transaction
                        Network.Bitcoin.Rpc.Wallet
 
   other-modules:       Network.Bitcoin.Internal
@@ -69,6 +70,9 @@ test-suite test-suite
                      , lens
                      
                      , hspec
+                     
+                     , bitcoin-tx
+                     , bitcoin-script
                      , bitcoin-rpc
 
 source-repository head

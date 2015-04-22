@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell   #-}
 
 module Network.Bitcoin.Rpc.Types.UnspentTransaction where
 
@@ -18,22 +18,40 @@ import qualified Data.Text                 as T
 
 -- | A transaction that is not yet spent. Every output transaction
 --   relies on one or more unspent input transansactions.
+--
+--   For more detailed documentation of the fields, see:
+--     https://bitcoin.org/en/developer-reference#listunspent
 data UnspentTransaction = UnspentTransaction {
-  _amount        :: Word64,
 
-  -- | Transaction identifier to uniquely identify this transaction.
+  -- | The transaction amount in 'RT.Btc'
+  _amount        :: RT.Btc,
+
+  -- | Transaction identifier to uniquely identify the transaction.
   _transactionId :: RT.TransactionId,
 
+  -- | The index of the output of the transaction that has been spent.
   _vout          :: Integer,
 
+  -- | Whether this input is spendable. If not, it means it is an output
+  --   of a watch-only address.
   _spendable     :: Bool,
 
-  _address       :: T.Text,
+  -- | The P2PKH or P2SH address this transaction belongs to. Only available in
+  --   case of P2PKH or P2SH output scripts.
+  _address       :: Maybe T.Text,
+
+  -- | If the address belongs to an account, the account is returned.
+  _account       :: Maybe T.Text,
 
   -- | The amount of confirmations this transaction has
   _confirmations :: Integer,
 
-  _scriptPubKey  :: T.Text
+  -- | The output script paid, encoded as hex
+  _scriptPubKey  :: T.Text,
+
+  -- | If the output is a P2SH whose script belongs to this wallet, this is the
+  --   redeem script.
+  _redeemScript  :: Maybe T.Text
 
   } deriving ( Show )
 
@@ -46,7 +64,10 @@ instance FromJSON UnspentTransaction where
       <*> o .:  "txid"
       <*> o .:  "vout"
       <*> o .:  "spendable"
-      <*> o .:  "address"
+      <*> o .:? "address"
+      <*> o .:? "account"
       <*> o .:  "confirmations"
       <*> o .:  "scriptPubKey"
+      <*> o .:? "redeemScript"
+
   parseJSON _          = mzero

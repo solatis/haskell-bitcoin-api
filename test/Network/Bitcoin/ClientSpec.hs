@@ -3,6 +3,8 @@
 module Network.Bitcoin.ClientSpec where
 
 import qualified Data.Text                as T (pack)
+import qualified Data.Bitcoin.Transaction as Btc
+import qualified Data.Bitcoin.Script      as Btc
 
 import           Network.HTTP.Client      (HttpException (..))
 
@@ -11,6 +13,7 @@ import           Control.Lens ((^.))
 import           Network.Bitcoin.Client
 import qualified Network.Bitcoin.Rpc.Misc as Misc
 import qualified Network.Bitcoin.Rpc.Wallet as Wallet
+import qualified Network.Bitcoin.Rpc.Transaction as Transaction
 import           Test.Hspec
 
 testClient :: (Client -> IO a) -> IO a
@@ -40,4 +43,17 @@ spec = do
    it "should be able list unspent transactions" $ do
      r <- testClient Wallet.listUnspent
 
+     putStrLn ("unspent = " ++ show r)
+
      length r `shouldSatisfy` (>= 1)
+
+  describe "when testing transaction functions" $ do
+   it "can create transaction" $ do
+     testClient $ \client -> do
+       utxs <- Wallet.listUnspent client
+       addr <- Wallet.newAddress client
+       tx   <- Transaction.create client utxs [(addr, 50)]
+
+       case tx of
+        (Btc.Transaction 1 _ [(Btc.TransactionOut 5000000000 (Btc.Script _))] 0) -> return ()
+        _ -> expectationFailure ("Result does not match expected: " ++ show tx)
