@@ -42,10 +42,28 @@ spec = do
   describe "when testing wallet functions" $ do
    it "should be able list unspent transactions" $ do
      r <- testClient Wallet.listUnspent
-
-     putStrLn ("unspent = " ++ show r)
-
      length r `shouldSatisfy` (>= 1)
+
+   it "should be able to create a new address under the default account" $ do
+     testClient $ \client -> do
+       addr <- Wallet.newAddress client
+       acc  <- Wallet.getAddressAccount client addr
+
+       acc `shouldBe` (T.pack "")
+
+   it "should be able to create a new address under a specific account" $ do
+     testClient $ \client -> do
+       addr <- Wallet.newAddressWith client (T.pack "testAccount")
+       acc  <- Wallet.getAddressAccount client addr
+
+       acc `shouldBe` (T.pack "testAccount")
+
+   it "should be able to create a change address" $ do
+     testClient $ \client -> do
+       addr <- Wallet.newChangeAddress client
+       acc <-  Wallet.getAddressAccount client addr
+
+       acc `shouldBe` (T.pack "")
 
   describe "when testing transaction functions" $ do
    it "can create transaction" $ do
