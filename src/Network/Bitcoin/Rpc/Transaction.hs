@@ -42,6 +42,6 @@ create client utxs outputs =
         ("txid", toJSON (tx ^. transactionId)),
         ("vout", toJSON (tx ^. vout))]
 
-      outToAddress (addr, btc) = (addr, (toJSON btc))
+      outToAddress (addr, btc) = (addr, toJSON btc)
 
   in (return . Btc.decode) =<< I.call client "createrawtransaction" configuration
