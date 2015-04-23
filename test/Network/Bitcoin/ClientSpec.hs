@@ -2,18 +2,20 @@
 
 module Network.Bitcoin.ClientSpec where
 
-import qualified Data.Text                as T (pack)
-import qualified Data.Bitcoin.Transaction as Btc
-import qualified Data.Bitcoin.Script      as Btc
+import qualified Data.Bitcoin.Script             as Btc
+import qualified Data.Bitcoin.Transaction        as Btc
+import qualified Data.List                       as L (find)
+import qualified Data.Text                       as T (pack)
+import Data.Maybe (isJust)
 
-import           Network.HTTP.Client      (HttpException (..))
+import           Network.HTTP.Client             (HttpException (..))
 
-import           Network.Wreq.Lens (statusCode)
-import           Control.Lens ((^.))
+import           Control.Lens                    ((^.))
 import           Network.Bitcoin.Client
-import qualified Network.Bitcoin.Rpc.Misc as Misc
-import qualified Network.Bitcoin.Rpc.Wallet as Wallet
+import qualified Network.Bitcoin.Rpc.Misc        as Misc
 import qualified Network.Bitcoin.Rpc.Transaction as Transaction
+import qualified Network.Bitcoin.Rpc.Wallet      as Wallet
+import           Network.Wreq.Lens               (statusCode)
 import           Test.Hspec
 
 testClient :: (Client -> IO a) -> IO a
@@ -44,6 +46,10 @@ spec = do
      r <- testClient Wallet.listUnspent
      length r `shouldSatisfy` (>= 1)
 
+   it "should be able list all accounts" $ do
+     r <- testClient Wallet.listAccounts
+     length r `shouldSatisfy` (>= 1)
+
    it "should be able to create a new address under the default account" $ do
      testClient $ \client -> do
        addr <- Wallet.newAddress client
@@ -57,6 +63,12 @@ spec = do
        acc  <- Wallet.getAddressAccount client addr
 
        acc `shouldBe` (T.pack "testAccount")
+
+       -- Extra validation that the account also appears in the wallet
+       list <- Wallet.listAccounts client
+       L.find (\(needle, _) -> needle == T.pack "testAccount") list `shouldSatisfy` isJust
+
+
 
    it "should be able to create a change address" $ do
      testClient $ \client -> do
