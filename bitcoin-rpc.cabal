@@ -43,9 +43,10 @@ library
                      , hexstring
 
                      , aeson
+                     , lens
+                     , lens-aeson
                      , unordered-containers
                      , wreq
-                     , lens
 
                      , bitcoin-tx
                      , bitcoin-script

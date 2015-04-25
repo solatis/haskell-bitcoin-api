@@ -1,10 +1,16 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+-- | This module provides functionality to manipulate raw transaction. It
+--   automatically interprets transactions using the `bitcoin-tx` package, so
+--   you can work with actual 'Btc.Transaction' objects rather than their
+--   serialized format.
+
 module Network.Bitcoin.Rpc.Transaction where
 
 import           Data.Aeson
+import           Data.Aeson.Lens
 
-import           Control.Lens                                 ((^.))
+import           Control.Lens                                 ((^.), (^?))
 
 import qualified Data.Bitcoin.Transaction                     as Btc
 
@@ -45,3 +51,42 @@ create client utxs outputs =
       outToAddress (addr, btc) = (addr, toJSON btc)
 
   in (return . Btc.decode) =<< I.call client "createrawtransaction" configuration
+
+
+-- | Signs a raw transaction with default parameters.
+sign :: T.Client                   -- ^ Our client context
+     -> Btc.Transaction            -- ^ The transaction to sign
+     -> Maybe [UnspentTransaction] -- ^ Previous outputs being spent by this transaction
+     -> Maybe [RT.PrivateKey]      -- ^ Private keys to use for signing.
+     -> IO Btc.Transaction         -- ^ The signed transaction
+sign client tx utxs pks =
+  let configuration = (configurationPks pks . configurationUtxs utxs  . configurationTx tx)  []
+
+      configurationTx tx' c =
+        c ++ [toJSON (Btc.encode tx')]
+
+      configurationUtxs Nothing c = c
+      configurationUtxs (Just utxs') c =
+        c ++ [toJSON (map utxToDependency utxs')]
+
+        where
+          utxToDependency utx = object [
+            ("txid",         toJSON (utx ^. transactionId)),
+            ("vout",         toJSON (utx ^. vout)),
+            ("scriptPubKey", toJSON (utx ^. scriptPubKey)),
+            ("redeemScript", toJSON (utx ^. redeemScript))]
+
+
+      configurationPks Nothing c = c
+      configurationPks (Just privateKeys) c =
+        c ++ [toJSON privateKeys]
+
+      call :: IO Value
+      call = I.call client "signrawtransaction" configuration
+
+  in do
+    res <- call
+
+    case (res ^? key "hex" . _JSON) of
+     Nothing -> error "Incorrect JSON response"
+     Just hs -> (return . Btc.decode) hs

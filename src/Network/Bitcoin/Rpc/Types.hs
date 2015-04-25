@@ -1,4 +1,5 @@
 module Network.Bitcoin.Rpc.Types ( TransactionId
+                                 , PrivateKey
                                  , Address
                                  , Account
                                  , Btc ) where
@@ -10,6 +11,9 @@ import qualified Data.Text      as T
 -- | Per Bitcoin documentation, An identifier used to uniquely identify a
 --   particular transaction; specifically, the sha256d hash of the transaction.
 type TransactionId = HS.HexString
+
+-- | A base58 private key to sign transactions
+type PrivateKey = T.Text
 
 -- | Per Bitcoin documentation, an identifier used to uniquely identify a
 --   particular address.

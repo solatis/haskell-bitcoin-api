@@ -68,8 +68,6 @@ spec = do
        list <- Wallet.listAccounts client
        L.find (\(needle, _) -> needle == T.pack "testAccount") list `shouldSatisfy` isJust
 
-
-
    it "should be able to create a change address" $ do
      testClient $ \client -> do
        addr <- Wallet.newChangeAddress client
@@ -85,5 +83,16 @@ spec = do
        tx   <- Transaction.create client utxs [(addr, 50)]
 
        case tx of
+        (Btc.Transaction 1 _ [(Btc.TransactionOut 5000000000 (Btc.Script _))] 0) -> return ()
+        _ -> expectationFailure ("Result does not match expected: " ++ show tx)
+
+   it "can sign transaction" $ do
+     testClient $ \client -> do
+       utxs <- Wallet.listUnspent client
+       addr <- Wallet.newAddress client
+       tx   <- Transaction.create client utxs [(addr, 50)]
+       tx'  <- Transaction.sign client tx Nothing Nothing
+
+       case tx' of
         (Btc.Transaction 1 _ [(Btc.TransactionOut 5000000000 (Btc.Script _))] 0) -> return ()
         _ -> expectationFailure ("Result does not match expected: " ++ show tx)
