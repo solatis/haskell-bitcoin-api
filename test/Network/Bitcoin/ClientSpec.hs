@@ -88,10 +88,12 @@ spec = do
 
    it "can sign transaction" $ do
      testClient $ \client -> do
-       utxs <- Wallet.listUnspent client
-       addr <- Wallet.newAddress client
-       tx   <- Transaction.create client utxs [(addr, 50)]
-       tx'  <- Transaction.sign client tx Nothing Nothing
+       utxs             <- Wallet.listUnspent client
+       addr             <- Wallet.newAddress client
+       tx               <- Transaction.create client utxs [(addr, 50)]
+       (tx', completed) <- Transaction.sign client tx Nothing Nothing
+
+       completed `shouldBe` True
 
        case tx' of
         (Btc.Transaction 1 _ [(Btc.TransactionOut 5000000000 (Btc.Script _))] 0) -> return ()

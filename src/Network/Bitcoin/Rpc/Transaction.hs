@@ -58,7 +58,9 @@ sign :: T.Client                   -- ^ Our client context
      -> Btc.Transaction            -- ^ The transaction to sign
      -> Maybe [UnspentTransaction] -- ^ Previous outputs being spent by this transaction
      -> Maybe [RT.PrivateKey]      -- ^ Private keys to use for signing.
-     -> IO Btc.Transaction         -- ^ The signed transaction
+     -> IO (Btc.Transaction, Bool) -- ^ The signed transaction, and a boolean that is true
+                                   --   when the signing is complete or and is false when
+                                   --   more signatures are required.
 sign client tx utxs pks =
   let configuration = (configurationPks pks . configurationUtxs utxs  . configurationTx tx)  []
 
@@ -84,9 +86,16 @@ sign client tx utxs pks =
       call :: IO Value
       call = I.call client "signrawtransaction" configuration
 
+      extractTransaction res =
+        case res ^? key "hex" . _JSON of
+         Nothing -> error "Incorrect JSON response"
+         Just hs -> Btc.decode hs
+
+      extractCompleted res =
+        case res ^? key "complete" . _JSON of
+         Nothing        -> error "Incorrect JSON response"
+         Just completed -> completed
+
   in do
     res <- call
-
-    case res ^? key "hex" . _JSON of
-     Nothing -> error "Incorrect JSON response"
-     Just hs -> (return . Btc.decode) hs
+    return (extractTransaction res, extractCompleted res)
