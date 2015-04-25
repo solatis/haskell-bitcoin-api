@@ -53,7 +53,7 @@ create client utxs outputs =
   in (return . Btc.decode) =<< I.call client "createrawtransaction" configuration
 
 
--- | Signs a raw transaction with default parameters.
+-- | Signs a raw transaction with configurable parameters.
 sign :: T.Client                   -- ^ Our client context
      -> Btc.Transaction            -- ^ The transaction to sign
      -> Maybe [UnspentTransaction] -- ^ Previous outputs being spent by this transaction
@@ -87,6 +87,6 @@ sign client tx utxs pks =
   in do
     res <- call
 
-    case (res ^? key "hex" . _JSON) of
+    case res ^? key "hex" . _JSON of
      Nothing -> error "Incorrect JSON response"
      Just hs -> (return . Btc.decode) hs
