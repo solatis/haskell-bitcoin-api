@@ -63,14 +63,14 @@ sign :: T.Client                   -- ^ Our client context
                                    --   when the signing is complete or and is false when
                                    --   more signatures are required.
 sign client tx utxs pks =
-  let configuration = (configurationPks pks . configurationUtxs utxs  . configurationTx tx)  []
+  let configuration = [configurationTx tx, configurationUtxs utxs, configurationPks pks]
 
-      configurationTx tx' c =
-        c ++ [toJSON (Btc.encode tx')]
+      configurationTx tx' =
+        toJSON (Btc.encode tx')
 
-      configurationUtxs Nothing c = c
-      configurationUtxs (Just utxs') c =
-        c ++ [toJSON (map utxToDependency utxs')]
+      configurationUtxs Nothing = Null
+      configurationUtxs (Just utxs') =
+        toJSON (map utxToDependency utxs')
 
         where
           utxToDependency utx = object [
@@ -80,9 +80,9 @@ sign client tx utxs pks =
             ("redeemScript", toJSON (utx ^. redeemScript))]
 
 
-      configurationPks Nothing c = c
-      configurationPks (Just privateKeys) c =
-        c ++ [toJSON privateKeys]
+      configurationPks Nothing = Null
+      configurationPks (Just privateKeys) =
+        toJSON privateKeys
 
       call :: IO Value
       call = I.call client "signrawtransaction" configuration

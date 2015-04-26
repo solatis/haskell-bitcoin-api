@@ -30,6 +30,7 @@ library
                        Network.Bitcoin.Types
                        Network.Bitcoin.Rpc.Types
                        Network.Bitcoin.Rpc.Types.UnspentTransaction
+                       Network.Bitcoin.Rpc.Dump
                        Network.Bitcoin.Rpc.Misc
                        Network.Bitcoin.Rpc.Transaction
                        Network.Bitcoin.Rpc.Wallet
