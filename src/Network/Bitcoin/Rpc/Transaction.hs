@@ -9,6 +9,7 @@ module Network.Bitcoin.Rpc.Transaction where
 
 import           Data.Aeson
 import           Data.Aeson.Lens
+import           Data.Maybe                                   ( fromMaybe )
 
 import           Control.Lens                                 ((^.), (^?))
 
@@ -87,14 +88,15 @@ sign client tx utxs pks =
       call = I.call client "signrawtransaction" configuration
 
       extractTransaction res =
-        case res ^? key "hex" . _JSON of
-         Nothing -> error "Incorrect JSON response"
-         Just hs -> Btc.decode hs
+        maybe
+          (error "Incorrect JSON response")
+          Btc.decode
+          (res ^? key "hex" . _JSON)
 
       extractCompleted res =
-        case res ^? key "complete" . _JSON of
-         Nothing        -> error "Incorrect JSON response"
-         Just completed -> completed
+        fromMaybe
+          (error "Incorrect JSON response")
+          (res ^? key "complete" . _JSON)
 
   in do
     res <- call
