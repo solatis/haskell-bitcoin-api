@@ -7,6 +7,7 @@ import           Control.Applicative       ((<$>), (<*>))
 import           Control.Lens.TH           (makeLenses)
 import           Control.Monad             (mzero)
 
+import qualified Data.Base58String         as B58S
 import           Data.Word                 (Word64)
 
 import           Data.Aeson
@@ -38,7 +39,7 @@ data UnspentTransaction = UnspentTransaction {
 
   -- | The P2PKH or P2SH address this transaction belongs to. Only available in
   --   case of P2PKH or P2SH output scripts.
-  _address       :: Maybe T.Text,
+  _address       :: Maybe B58S.Base58String,
 
   -- | If the address belongs to an account, the account is returned.
   _account       :: Maybe T.Text,

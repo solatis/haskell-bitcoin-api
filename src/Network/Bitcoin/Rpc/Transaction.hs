@@ -9,10 +9,11 @@ module Network.Bitcoin.Rpc.Transaction where
 
 import           Data.Aeson
 import           Data.Aeson.Lens
-import           Data.Maybe                                   ( fromMaybe )
+import           Data.Maybe                                   (fromMaybe)
 
 import           Control.Lens                                 ((^.), (^?))
 
+import qualified Data.Base58String                            as B58S
 import qualified Data.Bitcoin.Transaction                     as Btc
 
 import qualified Network.Bitcoin.Internal                     as I
@@ -49,7 +50,7 @@ create client utxs outputs =
         ("txid", toJSON (tx ^. transactionId)),
         ("vout", toJSON (tx ^. vout))]
 
-      outToAddress (addr, btc) = (addr, toJSON btc)
+      outToAddress (addr, btc) = (B58S.toText addr, toJSON btc)
 
   in (return . Btc.decode) =<< I.call client "createrawtransaction" configuration
 

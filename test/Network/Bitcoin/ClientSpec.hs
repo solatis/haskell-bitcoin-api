@@ -2,23 +2,24 @@
 
 module Network.Bitcoin.ClientSpec where
 
-import qualified Data.Bitcoin.Script             as Btc
-import qualified Data.Bitcoin.Transaction        as Btc
-import qualified Data.List                       as L (find)
-import           Data.Maybe                      ( isJust
-                                                 , mapMaybe )
-import qualified Data.Text                       as T (pack)
+import qualified Data.Bitcoin.Script                          as Btc
+import qualified Data.Bitcoin.Transaction                     as Btc
+import qualified Data.List                                    as L (find)
+import           Data.Maybe                                   (isJust, mapMaybe)
 
-import           Network.HTTP.Client             (HttpException (..))
+import qualified Data.Base58String                            as B58S
+import qualified Data.Text                                    as T (pack)
 
-import           Control.Lens                    ((^.))
+import           Network.HTTP.Client                          (HttpException (..))
+
+import           Control.Lens                                 ((^.))
 import           Network.Bitcoin.Client
+import qualified Network.Bitcoin.Rpc.Dump                     as Dump
+import qualified Network.Bitcoin.Rpc.Misc                     as Misc
+import qualified Network.Bitcoin.Rpc.Transaction              as Transaction
 import           Network.Bitcoin.Rpc.Types.UnspentTransaction (address)
-import qualified Network.Bitcoin.Rpc.Dump        as Dump
-import qualified Network.Bitcoin.Rpc.Misc        as Misc
-import qualified Network.Bitcoin.Rpc.Transaction as Transaction
-import qualified Network.Bitcoin.Rpc.Wallet      as Wallet
-import           Network.Wreq.Lens               (statusCode)
+import qualified Network.Bitcoin.Rpc.Wallet                   as Wallet
+import           Network.Wreq.Lens                            (statusCode)
 import           Test.Hspec
 
 testClient :: (Client -> IO a) -> IO a

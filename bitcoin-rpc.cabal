@@ -42,6 +42,7 @@ library
                      , bytestring
                      , binary
                      , hexstring
+                     , base58string
 
                      , aeson
                      , lens
@@ -66,6 +67,7 @@ test-suite test-suite
   build-depends:       base                     >= 4.3          && < 5
                      , bytestring
                      , text
+                     , base58string
 
                      , http-client
                      , wreq

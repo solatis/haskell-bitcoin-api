@@ -6,8 +6,7 @@ import           Data.Aeson
 import           Data.Aeson.Types
 
 import qualified Data.Text                                    as T
-
-import qualified Data.HashMap.Strict as HM
+import qualified Data.HashMap.Strict                          as HM
 
 import qualified Network.Bitcoin.Internal                     as I
 import qualified Network.Bitcoin.Rpc.Types                    as RT
@@ -40,7 +39,7 @@ listAccountsWith :: T.Client -- ^ Our client context
                  -> Bool     -- ^ Whether or not to include watch-only addresses
                  -> IO [(RT.Account, RT.Btc)]
 listAccountsWith client confirmations watchOnly =
-  let configuration = [toJSON confirmations, toJSON watchOnly]
+  let configuration        = [toJSON confirmations, toJSON watchOnly]
 
   in
     return . HM.toList =<< I.call client "listaccounts" configuration
@@ -49,7 +48,8 @@ listAccountsWith client confirmations watchOnly =
 --   Intended to be published to another party that wishes to send you money.
 newAddress :: T.Client         -- ^ Our client context
            -> IO RT.Address    -- ^ The address created
-newAddress client = newAddressWith client (T.pack "")
+newAddress client =
+  I.call client "getnewaddress" emptyArray
 
 -- | Provides access to a new receiving address filed under a specific account.
 --   Intended to be published to another party that wishes to send you money.
