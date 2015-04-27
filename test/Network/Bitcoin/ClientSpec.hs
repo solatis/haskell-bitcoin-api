@@ -17,7 +17,8 @@ import           Network.Bitcoin.Client
 import qualified Network.Bitcoin.Rpc.Dump                     as Dump
 import qualified Network.Bitcoin.Rpc.Misc                     as Misc
 import qualified Network.Bitcoin.Rpc.Transaction              as Transaction
-import           Network.Bitcoin.Rpc.Types.UnspentTransaction (address)
+import           Network.Bitcoin.Rpc.Types.UnspentTransaction ( address
+                                                              , amount )
 import qualified Network.Bitcoin.Rpc.Wallet                   as Wallet
 import           Network.Wreq.Lens                            (statusCode)
 import           Test.Hspec
@@ -122,6 +123,27 @@ spec = do
        -- This is an important check, since it validates that we are using the
        -- correct keys and our manual signing works properly.
        completed `shouldBe` True
+
+   it "can send a transaction" $ do
+     testClient $ \client -> do
+       utxs             <- Wallet.listUnspent client
+
+       (length utxs) `shouldSatisfy` (>= 1)
+
+       -- Calculate the total BTC of all unspent transactions
+       let btc          = foldr (+) 0 $ map (^. amount) utxs
+
+       putStrLn ("btc = " ++ show btc)
+
+       addr             <- Wallet.newAddress client
+       tx               <- Transaction.create client utxs [(addr, (btc - 0.0001))]
+       (tx', completed) <- Transaction.sign client tx (Just utxs) Nothing
+
+       completed `shouldBe` True
+
+       txid             <- Transaction.send client tx'
+       putStrLn ("txid = " ++ show txid)
+       True `shouldBe` True
 
   describe "when testing import/dump functions" $ do
    it "should be able to dump private key" $ do

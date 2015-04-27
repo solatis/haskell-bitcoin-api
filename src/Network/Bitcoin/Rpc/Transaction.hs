@@ -85,9 +85,6 @@ sign client tx utxs pks =
       configurationPks (Just privateKeys) =
         toJSON privateKeys
 
-      call :: IO Value
-      call = I.call client "signrawtransaction" configuration
-
       extractTransaction res =
         maybe
           (error "Incorrect JSON response")
@@ -100,5 +97,14 @@ sign client tx utxs pks =
           (res ^? key "complete" . _JSON)
 
   in do
-    res <- call
+    res <- (I.call client "signrawtransaction" configuration :: IO Value)
     return (extractTransaction res, extractCompleted res)
+
+-- | Sends a transaction through the Bitcoin network
+send :: T.Client
+     -> Btc.Transaction
+     -> IO RT.TransactionId
+send client tx =
+  let configuration = [toJSON (Btc.encode tx)]
+
+  in I.call client "sendrawtransaction" configuration
