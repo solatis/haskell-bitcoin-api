@@ -97,7 +97,7 @@ sign client tx utxs pks =
           (res ^? key "complete" . _JSON)
 
   in do
-    res <- (I.call client "signrawtransaction" configuration :: IO Value)
+    res <- I.call client "signrawtransaction" configuration :: IO Value
     return (extractTransaction res, extractCompleted res)
 
 -- | Sends a transaction through the Bitcoin network
