@@ -1,18 +1,18 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Network.Bitcoin.Internal where
+module Network.Bitcoin.Rpc.Internal where
 
-import Control.Applicative ((<$>))
-import           Control.Lens          ((^.))
-import           Control.Monad         (mzero)
-import qualified Network.Wreq          as W
-import qualified Network.Wreq.Session  as WS
+import           Control.Applicative       ((<$>))
+import           Control.Lens              ((^.))
+import           Control.Monad             (mzero)
+import qualified Network.Wreq              as W
+import qualified Network.Wreq.Session      as WS
 
 import           Data.Aeson
-import qualified Data.HashMap.Strict   as HM
+import qualified Data.HashMap.Strict       as HM
 
-import qualified Data.Text             as T
-import qualified Network.Bitcoin.Types as T
+import qualified Data.Text                 as T
+import qualified Network.Bitcoin.Rpc.Types as T
 
 data RpcResult a = RpcResultError String
                  | RpcResultOk a

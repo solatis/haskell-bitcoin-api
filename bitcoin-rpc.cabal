@@ -26,16 +26,17 @@ library
   ghc-options:         -Wall -ferror-spans
   default-language:    Haskell2010
 
-  exposed-modules:     Network.Bitcoin.Client
-                       Network.Bitcoin.Types
+  exposed-modules:     Network.Bitcoin.Rpc.Client
                        Network.Bitcoin.Rpc.Types
                        Network.Bitcoin.Rpc.Types.UnspentTransaction
+                       Network.Bitcoin.Rpc.Blockchain
                        Network.Bitcoin.Rpc.Dump
+                       Network.Bitcoin.Rpc.Mining
                        Network.Bitcoin.Rpc.Misc
                        Network.Bitcoin.Rpc.Transaction
                        Network.Bitcoin.Rpc.Wallet
 
-  other-modules:       Network.Bitcoin.Internal
+  other-modules:       Network.Bitcoin.Rpc.Internal
                          
   build-depends:       base                     >= 4.3          && < 5
                      , text
@@ -50,7 +51,9 @@ library
                      , unordered-containers
                      , wreq
 
-                     , bitcoin-tx
+                     , bitcoin-types
+                     , bitcoin-block
+                     , bitcoin-tx                     
                      , bitcoin-script
 
 test-suite test-suite

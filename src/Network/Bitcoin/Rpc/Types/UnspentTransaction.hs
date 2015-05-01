@@ -3,19 +3,19 @@
 
 module Network.Bitcoin.Rpc.Types.UnspentTransaction where
 
-import           Control.Applicative       ((<$>), (<*>))
-import           Control.Lens.TH           (makeLenses)
-import           Control.Monad             (mzero)
+import           Control.Applicative ((<$>), (<*>))
+import           Control.Lens.TH     (makeLenses)
+import           Control.Monad       (mzero)
 
-import qualified Data.Base58String         as B58S
-import           Data.Word                 (Word64)
+import qualified Data.Base58String   as B58S
+import           Data.Word           (Word64)
 
 import           Data.Aeson
 import           Data.Aeson.Types
 
-import qualified Network.Bitcoin.Rpc.Types as RT
+import qualified Data.Bitcoin.Types  as BT
 
-import qualified Data.Text                 as T
+import qualified Data.Text           as T
 
 -- | A transaction that is not yet spent. Every output transaction
 --   relies on one or more unspent input transansactions.
@@ -24,11 +24,11 @@ import qualified Data.Text                 as T
 --     https://bitcoin.org/en/developer-reference#listunspent
 data UnspentTransaction = UnspentTransaction {
 
-  -- | The transaction amount in 'RT.Btc'
-  _amount        :: RT.Btc,
+  -- | The transaction amount in 'BT.Btc'
+  _amount        :: BT.Btc,
 
   -- | Transaction identifier to uniquely identify the transaction.
-  _transactionId :: RT.TransactionId,
+  _transactionId :: BT.TransactionId,
 
   -- | The index of the output of the transaction that has been spent.
   _vout          :: Integer,

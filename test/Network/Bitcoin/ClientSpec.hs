@@ -13,9 +13,12 @@ import qualified Data.Text                                    as T (pack)
 import           Network.HTTP.Client                          (HttpException (..))
 
 import           Control.Lens                                 ((^.))
-import           Network.Bitcoin.Client
+import           Network.Bitcoin.Rpc.Client
+
+import qualified Network.Bitcoin.Rpc.Blockchain               as Blockchain
 import qualified Network.Bitcoin.Rpc.Dump                     as Dump
 import qualified Network.Bitcoin.Rpc.Misc                     as Misc
+import qualified Network.Bitcoin.Rpc.Mining                   as Mining
 import qualified Network.Bitcoin.Rpc.Transaction              as Transaction
 import           Network.Bitcoin.Rpc.Types.UnspentTransaction ( address
                                                               , amount )
@@ -45,6 +48,19 @@ spec = do
 
      r ^. Misc.bitcoinVersion `shouldBe` 100000
      r ^. Misc.bitcoindErrors `shouldBe` (T.pack "")
+
+  describe "when testing mining functions" $ do
+   it "can generate blocks" $ do
+     r <- testClient $ \client -> do
+       Mining.generate client 1
+
+     length r `shouldBe` 1
+
+  describe "when testing blockchain functions" $ do
+   it "can request blockcount" $ do
+     r <- testClient Blockchain.getBlockCount
+
+     r `shouldSatisfy` (>= 100)
 
   describe "when testing wallet functions" $ do
    it "should be able list unspent transactions" $ do

@@ -2,13 +2,14 @@
 
 module Network.Bitcoin.Rpc.Dump where
 
-import Data.Aeson.Types ( emptyArray )
+import           Data.Aeson.Types             (emptyArray)
 
-import qualified Network.Bitcoin.Internal  as I
-import qualified Network.Bitcoin.Rpc.Types as RT
-import qualified Network.Bitcoin.Types     as T
+import qualified Data.Bitcoin.Types           as BT
 
-getPrivateKey :: T.Client -> RT.Address -> IO RT.PrivateKey
+import qualified Network.Bitcoin.Rpc.Internal as I
+import qualified Network.Bitcoin.Rpc.Types    as T
+
+getPrivateKey :: T.Client -> BT.Address -> IO BT.PrivateKey
 getPrivateKey client addr =
   let configuration = [addr]
   in I.call client "dumpprivkey" configuration

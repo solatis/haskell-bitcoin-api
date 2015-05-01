@@ -16,9 +16,9 @@ import           Control.Lens                                 ((^.), (^?))
 import qualified Data.Base58String                            as B58S
 import qualified Data.Bitcoin.Transaction                     as Btc
 
-import qualified Network.Bitcoin.Internal                     as I
-import qualified Network.Bitcoin.Rpc.Types                    as RT
-import qualified Network.Bitcoin.Types                        as T
+import qualified Data.Bitcoin.Types                           as BT
+import qualified Network.Bitcoin.Rpc.Internal                 as I
+import qualified Network.Bitcoin.Rpc.Types                    as T
 
 import           Network.Bitcoin.Rpc.Types.UnspentTransaction
 
@@ -39,7 +39,7 @@ import           Network.Bitcoin.Rpc.Types.UnspentTransaction
 
 create :: T.Client               -- ^ The client session we are using
        -> [UnspentTransaction]   -- ^ The inputs we are using for this transaction
-       -> [(RT.Address, RT.Btc)] -- ^ A key/value pair which associates a
+       -> [(BT.Address, BT.Btc)] -- ^ A key/value pair which associates a
                                  --   destination address with a specific amount
                                  --   of bitcoins to send.
        -> IO Btc.Transaction
@@ -59,7 +59,7 @@ create client utxs outputs =
 sign :: T.Client                   -- ^ Our client context
      -> Btc.Transaction            -- ^ The transaction to sign
      -> Maybe [UnspentTransaction] -- ^ Previous outputs being spent by this transaction
-     -> Maybe [RT.PrivateKey]      -- ^ Private keys to use for signing.
+     -> Maybe [BT.PrivateKey]      -- ^ Private keys to use for signing.
      -> IO (Btc.Transaction, Bool) -- ^ The signed transaction, and a boolean that is true
                                    --   when the signing is complete or and is false when
                                    --   more signatures are required.
@@ -103,8 +103,12 @@ sign client tx utxs pks =
 -- | Sends a transaction through the Bitcoin network
 send :: T.Client
      -> Btc.Transaction
-     -> IO RT.TransactionId
+     -> IO BT.TransactionId
 send client tx =
   let configuration = [toJSON (Btc.encode tx)]
 
   in I.call client "sendrawtransaction" configuration
+
+
+-- | Returns an infinite list with transactions starting at a certain block
+--   hash. If no block hash is provided, will start at the most recent block.
