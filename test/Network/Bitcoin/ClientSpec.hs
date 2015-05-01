@@ -173,6 +173,8 @@ spec = do
        True `shouldBe` True
 
    it "can list transactions" $ do
+     -- Generate a block, so we know for sure that some transactions are in some blocks.
+     _   <- testClient $ \client -> Mining.generate client 1
      txs <- testClient $ \client -> Transaction.list client Nothing
 
      -- :TODO: validate that there transactions are in chronological order
