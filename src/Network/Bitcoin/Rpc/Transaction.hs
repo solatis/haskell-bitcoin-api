@@ -122,4 +122,4 @@ list client (Just offset) = do
   limit  <- Blockchain.getBlockCount client
   blocks <- mapM (Blockchain.getBlock client) =<< mapM (Blockchain.getBlockHash client) [offset..limit - 1]
 
-  return $ foldl (\lhs rhs -> lhs ++ (Btc.blockTxns rhs)) [] blocks
+  return $ foldl (\lhs rhs -> lhs ++ Btc.blockTxns rhs) [] blocks
