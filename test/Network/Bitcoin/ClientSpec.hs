@@ -50,10 +50,14 @@ spec = do
 
   describe "when testing mining functions" $ do
    it "can generate blocks" $ do
+     countBefore <- testClient Blockchain.getBlockCount
      r <- testClient $ \client -> do
        Mining.generate client 1
 
+     countAfter <- testClient Blockchain.getBlockCount
+
      length r `shouldBe` 1
+     (countBefore + 1) `shouldBe` countAfter
 
   describe "when testing blockchain functions" $ do
    it "can request blockcount" $ do
@@ -173,8 +177,9 @@ spec = do
        True `shouldBe` True
 
    it "can list transactions" $ do
-     -- Generate a block, so we know for sure that some transactions are in some blocks.
-     _   <- testClient $ \client -> Mining.generate client 1
+     -- Generate some blocks, so we know for sure that some transactions are in
+     -- some blocks.
+     _   <- testClient $ \client -> Mining.generate client 10
      txs <- testClient $ \client -> Transaction.list client Nothing
 
      -- :TODO: validate that there transactions are in chronological order
