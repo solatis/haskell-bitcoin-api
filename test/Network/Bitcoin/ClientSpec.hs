@@ -7,7 +7,6 @@ import qualified Data.Bitcoin.Transaction                     as Btc
 import qualified Data.List                                    as L (find)
 import           Data.Maybe                                   (isJust, mapMaybe)
 
-import qualified Data.Base58String                            as B58S
 import qualified Data.Text                                    as T (pack)
 
 import           Network.HTTP.Client                          (HttpException (..))
@@ -61,6 +60,20 @@ spec = do
      r <- testClient Blockchain.getBlockCount
 
      r `shouldSatisfy` (>= 100)
+
+   it "can request block hashes" $ do
+     testClient $ \client -> do
+       count  <- Blockchain.getBlockCount client
+       hashes <- mapM (Blockchain.getBlockHash client) [0..count - 1]
+
+       fromIntegral (length (hashes)) `shouldBe` count
+
+   it "can request blocks" $ do
+     testClient $ \client -> do
+       count  <- Blockchain.getBlockCount client
+       blocks <- mapM (Blockchain.getBlock client) =<< mapM (Blockchain.getBlockHash client) [0..count - 1]
+
+       fromIntegral (length (blocks)) `shouldBe` count
 
   describe "when testing wallet functions" $ do
    it "should be able list unspent transactions" $ do
