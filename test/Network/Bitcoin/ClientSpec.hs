@@ -16,13 +16,13 @@ import           Network.Bitcoin.Rpc.Client
 
 import qualified Network.Bitcoin.Rpc.Blockchain               as Blockchain
 import qualified Network.Bitcoin.Rpc.Dump                     as Dump
-import qualified Network.Bitcoin.Rpc.Misc                     as Misc
 import qualified Network.Bitcoin.Rpc.Mining                   as Mining
+import qualified Network.Bitcoin.Rpc.Misc                     as Misc
 import qualified Network.Bitcoin.Rpc.Transaction              as Transaction
-import           Network.Bitcoin.Rpc.Types.UnspentTransaction ( address
-                                                              , amount )
+import           Network.Bitcoin.Rpc.Types.UnspentTransaction (address, amount)
 import qualified Network.Bitcoin.Rpc.Wallet                   as Wallet
 import           Network.Wreq.Lens                            (statusCode)
+
 import           Test.Hspec
 
 testClient :: (Client -> IO a) -> IO a
@@ -162,8 +162,6 @@ spec = do
        -- Calculate the total BTC of all unspent transactions
        let btc          = foldr (+) 0 $ map (^. amount) utxs
 
-       putStrLn ("btc = " ++ show btc)
-
        addr             <- Wallet.newAddress client
        tx               <- Transaction.create client utxs [(addr, (btc - 0.0001))]
        (tx', completed) <- Transaction.sign client tx (Just utxs) Nothing
@@ -173,6 +171,12 @@ spec = do
        txid             <- Transaction.send client tx'
        putStrLn ("txid = " ++ show txid)
        True `shouldBe` True
+
+   it "can list transactions" $ do
+     txs <- testClient $ \client -> Transaction.list client Nothing
+
+     -- :TODO: validate that there transactions are in chronological order
+     length (txs) `shouldSatisfy` (>= 1)
 
   describe "when testing import/dump functions" $ do
    it "should be able to dump private key" $ do

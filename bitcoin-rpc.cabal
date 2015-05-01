@@ -68,6 +68,7 @@ test-suite test-suite
                        Main
 
   build-depends:       base                     >= 4.3          && < 5
+                     , groom
                      , bytestring
                      , text
                      , base58string

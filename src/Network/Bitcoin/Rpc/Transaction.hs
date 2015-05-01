@@ -15,7 +15,9 @@ import           Control.Lens                                 ((^.), (^?))
 
 import qualified Data.Base58String                            as B58S
 import qualified Data.Bitcoin.Transaction                     as Btc
+import qualified Data.Bitcoin.Block                           as Btc (Block (..))
 
+import qualified Network.Bitcoin.Rpc.Blockchain               as Blockchain
 import qualified Data.Bitcoin.Types                           as BT
 import qualified Network.Bitcoin.Rpc.Internal                 as I
 import qualified Network.Bitcoin.Rpc.Types                    as T
@@ -109,6 +111,15 @@ send client tx =
 
   in I.call client "sendrawtransaction" configuration
 
+-- | Returns a list of transactions that occured since a certain block height.
+--   If no block height was provided, the genisis block with height 0 is assumed.
+--   The transactions returned are listed chronologically.
+list :: T.Client
+     -> Maybe Integer
+     -> IO [Btc.Transaction]
+list client Nothing       = list client (Just 0)
+list client (Just offset) = do
+  limit  <- Blockchain.getBlockCount client
+  blocks <- mapM (Blockchain.getBlock client) =<< mapM (Blockchain.getBlockHash client) [offset..limit - 1]
 
--- | Returns an infinite list with transactions starting at a certain block
---   hash. If no block hash is provided, will start at the most recent block.
+  return $ foldl (\lhs rhs -> lhs ++ (Btc.blockTxns rhs)) [] blocks
