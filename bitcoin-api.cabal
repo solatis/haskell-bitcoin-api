@@ -1,4 +1,4 @@
-name: bitcoin-rpc
+name: bitcoin-api
 category: Network, Finance
 version: 0.9.0
 license: MIT
@@ -81,7 +81,7 @@ test-suite test-suite
                      
                      , bitcoin-tx
                      , bitcoin-script
-                     , bitcoin-rpc
+                     , bitcoin-api
 
 source-repository head
   type: git
