@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell   #-}
 
-module Network.Bitcoin.Rpc.Types.UnspentTransaction where
+module Network.Bitcoin.Api.Types.UnspentTransaction where
 
 import           Control.Applicative ((<$>), (<*>))
 import           Control.Lens.TH     (makeLenses)

@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell   #-}
 
-module Network.Bitcoin.Rpc.Misc where
+module Network.Bitcoin.Api.Misc where
 
 import           Control.Applicative          ((<$>), (<*>))
 import           Control.Lens.TH              (makeLenses)
@@ -11,8 +11,8 @@ import           Data.Aeson
 import           Data.Aeson.Types             (emptyArray)
 import qualified Data.Text                    as T
 
-import qualified Network.Bitcoin.Rpc.Internal as I
-import qualified Network.Bitcoin.Rpc.Types    as T
+import qualified Network.Bitcoin.Api.Internal as I
+import qualified Network.Bitcoin.Api.Types    as T
 
 data BitcoinInfo = BitcoinInfo {
 

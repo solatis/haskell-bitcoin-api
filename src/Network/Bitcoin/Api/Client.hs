@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Network.Bitcoin.Rpc.Client ( T.Client (..)
+module Network.Bitcoin.Api.Client ( T.Client (..)
                                   , withClient ) where
 
 import           Control.Lens              ((&), (?~))
@@ -10,7 +10,7 @@ import qualified Network.Wreq.Session      as WS
 import qualified Data.Text                 as T
 import qualified Data.Text.Encoding        as TE
 
-import qualified Network.Bitcoin.Rpc.Types as T
+import qualified Network.Bitcoin.Api.Types as T
 
 -- | Initializes a client and prepares it for making requests against the
 --   Bitcoin RPC API. Connection reuse is provided, and cleanup of any acquired

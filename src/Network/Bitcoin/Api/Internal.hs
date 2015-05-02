@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Network.Bitcoin.Rpc.Internal where
+module Network.Bitcoin.Api.Internal where
 
 import           Control.Applicative       ((<$>))
 import           Control.Lens              ((^.))
@@ -12,7 +12,7 @@ import           Data.Aeson
 import qualified Data.HashMap.Strict       as HM
 
 import qualified Data.Text                 as T
-import qualified Network.Bitcoin.Rpc.Types as T
+import qualified Network.Bitcoin.Api.Types as T
 
 data RpcResult a = RpcResultError String
                  | RpcResultOk a

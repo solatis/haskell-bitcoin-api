@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Network.Bitcoin.Rpc.Blockchain where
+module Network.Bitcoin.Api.Blockchain where
 
 import           Data.Aeson
 import           Data.Aeson.Types             (emptyArray)
@@ -9,8 +9,8 @@ import qualified Data.HexString               as HS
 import qualified Data.Bitcoin.Block           as Btc
 
 import qualified Data.Bitcoin.Types           as BT
-import qualified Network.Bitcoin.Rpc.Internal as I
-import qualified Network.Bitcoin.Rpc.Types    as T
+import qualified Network.Bitcoin.Api.Internal as I
+import qualified Network.Bitcoin.Api.Types    as T
 
 getBlockCount :: T.Client -> IO Integer
 getBlockCount client =

@@ -1,4 +1,4 @@
-module Network.Bitcoin.Rpc.Types where
+module Network.Bitcoin.Api.Types where
 
 import qualified Network.Wreq          as W
 import qualified Network.Wreq.Session  as WS

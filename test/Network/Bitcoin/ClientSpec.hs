@@ -12,15 +12,15 @@ import qualified Data.Text                                    as T (pack)
 import           Network.HTTP.Client                          (HttpException (..))
 
 import           Control.Lens                                 ((^.))
-import           Network.Bitcoin.Rpc.Client
+import           Network.Bitcoin.Api.Client
 
-import qualified Network.Bitcoin.Rpc.Blockchain               as Blockchain
-import qualified Network.Bitcoin.Rpc.Dump                     as Dump
-import qualified Network.Bitcoin.Rpc.Mining                   as Mining
-import qualified Network.Bitcoin.Rpc.Misc                     as Misc
-import qualified Network.Bitcoin.Rpc.Transaction              as Transaction
-import           Network.Bitcoin.Rpc.Types.UnspentTransaction (address, amount)
-import qualified Network.Bitcoin.Rpc.Wallet                   as Wallet
+import qualified Network.Bitcoin.Api.Blockchain               as Blockchain
+import qualified Network.Bitcoin.Api.Dump                     as Dump
+import qualified Network.Bitcoin.Api.Mining                   as Mining
+import qualified Network.Bitcoin.Api.Misc                     as Misc
+import qualified Network.Bitcoin.Api.Transaction              as Transaction
+import           Network.Bitcoin.Api.Types.UnspentTransaction (address, amount)
+import qualified Network.Bitcoin.Api.Wallet                   as Wallet
 import           Network.Wreq.Lens                            (statusCode)
 
 import           Test.Hspec

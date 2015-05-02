@@ -26,17 +26,17 @@ library
   ghc-options:         -Wall -ferror-spans
   default-language:    Haskell2010
 
-  exposed-modules:     Network.Bitcoin.Rpc.Client
-                       Network.Bitcoin.Rpc.Types
-                       Network.Bitcoin.Rpc.Types.UnspentTransaction
-                       Network.Bitcoin.Rpc.Blockchain
-                       Network.Bitcoin.Rpc.Dump
-                       Network.Bitcoin.Rpc.Mining
-                       Network.Bitcoin.Rpc.Misc
-                       Network.Bitcoin.Rpc.Transaction
-                       Network.Bitcoin.Rpc.Wallet
+  exposed-modules:     Network.Bitcoin.Api.Client
+                       Network.Bitcoin.Api.Types
+                       Network.Bitcoin.Api.Types.UnspentTransaction
+                       Network.Bitcoin.Api.Blockchain
+                       Network.Bitcoin.Api.Dump
+                       Network.Bitcoin.Api.Mining
+                       Network.Bitcoin.Api.Misc
+                       Network.Bitcoin.Api.Transaction
+                       Network.Bitcoin.Api.Wallet
 
-  other-modules:       Network.Bitcoin.Rpc.Internal
+  other-modules:       Network.Bitcoin.Api.Internal
                          
   build-depends:       base                     >= 4.3          && < 5
                      , text

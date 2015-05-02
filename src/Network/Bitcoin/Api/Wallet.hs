@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Network.Bitcoin.Rpc.Wallet where
+module Network.Bitcoin.Api.Wallet where
 
 import           Data.Aeson
 import           Data.Aeson.Types
@@ -9,9 +9,9 @@ import qualified Data.HashMap.Strict                          as HM
 import qualified Data.Text                                    as T
 
 import qualified Data.Bitcoin.Types                           as BT
-import qualified Network.Bitcoin.Rpc.Internal                 as I
-import qualified Network.Bitcoin.Rpc.Types                    as T
-import           Network.Bitcoin.Rpc.Types.UnspentTransaction (UnspentTransaction)
+import qualified Network.Bitcoin.Api.Internal                 as I
+import qualified Network.Bitcoin.Api.Types                    as T
+import           Network.Bitcoin.Api.Types.UnspentTransaction (UnspentTransaction)
 
 -- | Lists unspent transaction with default parameters
 listUnspent :: T.Client

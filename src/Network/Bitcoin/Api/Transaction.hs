@@ -5,7 +5,7 @@
 --   you can work with actual 'Btc.Transaction' objects rather than their
 --   serialized format.
 
-module Network.Bitcoin.Rpc.Transaction where
+module Network.Bitcoin.Api.Transaction where
 
 import           Data.Aeson
 import           Data.Aeson.Lens
@@ -17,12 +17,12 @@ import qualified Data.Base58String                            as B58S
 import qualified Data.Bitcoin.Transaction                     as Btc
 import qualified Data.Bitcoin.Block                           as Btc (Block (..))
 
-import qualified Network.Bitcoin.Rpc.Blockchain               as Blockchain
+import qualified Network.Bitcoin.Api.Blockchain               as Blockchain
 import qualified Data.Bitcoin.Types                           as BT
-import qualified Network.Bitcoin.Rpc.Internal                 as I
-import qualified Network.Bitcoin.Rpc.Types                    as T
+import qualified Network.Bitcoin.Api.Internal                 as I
+import qualified Network.Bitcoin.Api.Types                    as T
 
-import           Network.Bitcoin.Rpc.Types.UnspentTransaction
+import           Network.Bitcoin.Api.Types.UnspentTransaction
 
 -- | Creates a new transaction, but does not sign or submit it yet. You provide
 --   a set of unspent transactions that you have the authority to spend, and you
