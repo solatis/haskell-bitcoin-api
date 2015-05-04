@@ -117,9 +117,10 @@ send client tx =
 list :: T.Client      -- ^ Our client session context
      -> Maybe Integer -- ^ The offset / height we should start listing transactions
      -> Maybe Integer -- ^ Minimum amount of confirmations for a transaction to have. Should be 1 or higher.
+                      --   A default value of 6 is used.
      -> IO [Btc.Transaction]
 list client Nothing confirmations = list client (Just 0) confirmations
-list client offset Nothing        = list client offset (Just 1)
+list client offset Nothing        = list client offset (Just 6)
 list client (Just offset) (Just confirmations) = do
   limit  <- Blockchain.getBlockCount client
   blocks <- mapM (Blockchain.getBlock client) =<< mapM (Blockchain.getBlockHash client) [offset..limit - confirmations]
