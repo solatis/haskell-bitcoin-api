@@ -114,12 +114,14 @@ send client tx =
 -- | Returns a list of transactions that occured since a certain block height.
 --   If no block height was provided, the genisis block with height 0 is assumed.
 --   The transactions returned are listed chronologically.
-list :: T.Client
-     -> Maybe Integer
+list :: T.Client      -- ^ Our client session context
+     -> Maybe Integer -- ^ The offset / height we should start listing transactions
+     -> Maybe Integer -- ^ Minimum amount of confirmations for a transaction to have. Should be 1 or higher.
      -> IO [Btc.Transaction]
-list client Nothing       = list client (Just 0)
-list client (Just offset) = do
+list client Nothing confirmations = list client (Just 0) confirmations
+list client offset Nothing        = list client offset (Just 1)
+list client (Just offset) (Just confirmations) = do
   limit  <- Blockchain.getBlockCount client
-  blocks <- mapM (Blockchain.getBlock client) =<< mapM (Blockchain.getBlockHash client) [offset..limit - 1]
+  blocks <- mapM (Blockchain.getBlock client) =<< mapM (Blockchain.getBlockHash client) [offset..limit - confirmations]
 
   return $ foldl (\lhs rhs -> lhs ++ Btc.blockTxns rhs) [] blocks

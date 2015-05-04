@@ -180,7 +180,7 @@ spec = do
      -- Generate some blocks, so we know for sure that some transactions are in
      -- some blocks.
      _   <- testClient $ \client -> Mining.generate client 10
-     txs <- testClient $ \client -> Transaction.list client Nothing
+     txs <- testClient $ \client -> Transaction.list client Nothing Nothing
 
      -- :TODO: validate that there transactions are in chronological order
      length (txs) `shouldSatisfy` (>= 1)
