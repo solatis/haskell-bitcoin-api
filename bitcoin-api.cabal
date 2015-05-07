@@ -85,8 +85,9 @@ test-suite test-suite
                      , base58string
 
                      , http-client
-                     , wreq
+                     , wreq                     
                      , lens
+                     , conduit
                      
                      , hspec
                      
