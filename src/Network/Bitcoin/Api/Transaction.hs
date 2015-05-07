@@ -37,9 +37,6 @@ import qualified Network.Bitcoin.Api.Types                    as T
 
 import           Network.Bitcoin.Api.Types.UnspentTransaction hiding (confirmations)
 
-import Debug.Trace (trace)
-import Text.Groom (groom)
-
 
 -- | Creates a new transaction, but does not sign or submit it yet. You provide
 --   a set of unspent transactions that you have the authority to spend, and you
@@ -170,8 +167,6 @@ watch client (Just confirmations) = do
     watchNext chan height = do
       cur <- blockHeight
 
-      trace ("watchNext cur = " ++ show cur ++ ", height = " ++ show height) (return ())
-
       if cur > height
         then go chan (height + 1)
         else threadDelay 1000000 >> watchNext chan height
@@ -179,16 +174,12 @@ watch client (Just confirmations) = do
     -- | Fills the chan with all transactions from the block at `height`,
     --   and then continues waiting until a next block is available.
     go chan height = do
-      trace ("go height = " ++ show height) (return ())
       block <- Blockchain.getBlock client =<< Blockchain.getBlockHash client height
       tid   <- myThreadId
 
 
-      trace ("my thread id = " ++ show tid) (return ())
       result <- mapM (insert chan) (Btc.blockTxns block)
       let isClosed = False `elem` result
-
-      trace ("2 isClosed = " ++ show isClosed) (return ())
 
       if isClosed
         then killThread tid
@@ -197,9 +188,6 @@ watch client (Just confirmations) = do
     -- | Inserts a transaction into the queue. Blocks if the queue is full.
     --   Returns True if write succeeded, False is the queue was closed.
     insert chan tx = atomically $ do
-      trace ("inserting transaction: " ++ groom tx) (return ())
       isClosed <- isClosedTBMQueue chan
-
-      trace ("1 isClosed = " ++ show isClosed) (return ())
       unless isClosed (writeTBMQueue chan tx)
       return isClosed
