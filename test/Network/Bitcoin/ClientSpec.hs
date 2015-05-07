@@ -185,6 +185,9 @@ spec = do
      -- :TODO: validate that there transactions are in chronological order
      length (txs) `shouldSatisfy` (>= 1)
 
+   it "can watch for new transactions" $ do
+     True `shouldBe` True
+
   describe "when testing import/dump functions" $ do
    it "should be able to dump private key" $ do
      testClient $ \client -> do

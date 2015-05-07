@@ -44,12 +44,18 @@ library
                      , binary
                      , hexstring
                      , base58string
+                     , groom
 
                      , aeson
                      , lens
                      , lens-aeson
                      , unordered-containers
                      , wreq
+                     , conduit
+                     , transformers
+                     , stm
+                     , stm-chans
+                     , stm-conduit
 
                      , bitcoin-types
                      , bitcoin-block
@@ -68,7 +74,6 @@ test-suite test-suite
                        Main
 
   build-depends:       base                     >= 4.3          && < 5
-                     , groom
                      , bytestring
                      , text
                      , base58string
