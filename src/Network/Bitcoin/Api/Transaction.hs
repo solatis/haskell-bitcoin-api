@@ -153,7 +153,7 @@ watch :: T.Client                    -- ^ Our client session context
 watch client Nothing              = watch client (Just 6)
 watch client (Just confirmations) = do
   chan      <- liftIO $ atomically $ newTBMQueue 16
-  curHeight <- liftIO $ blockHeight
+  curHeight <- liftIO blockHeight
   _         <- liftIO $ forkIO $ watchNext chan curHeight
 
   sourceTBMQueue chan
@@ -172,7 +172,7 @@ watch client (Just confirmations) = do
 
       trace ("watchNext cur = " ++ show cur ++ ", height = " ++ show height) (return ())
 
-      if (cur > height)
+      if cur > height
         then go chan (height + 1)
         else threadDelay 1000000 >> watchNext chan height
 
@@ -186,7 +186,7 @@ watch client (Just confirmations) = do
 
       trace ("my thread id = " ++ show tid) (return ())
       result <- mapM (insert chan) (Btc.blockTxns block)
-      let isClosed = elem False result
+      let isClosed = False `elem` result
 
       trace ("2 isClosed = " ++ show isClosed) (return ())
 
