@@ -44,7 +44,6 @@ library
                      , binary
                      , hexstring
                      , base58string
-                     , groom
 
                      , aeson
                      , lens
