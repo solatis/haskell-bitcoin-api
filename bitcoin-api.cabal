@@ -69,7 +69,13 @@ test-suite test-suite
   hs-source-dirs:      test
   main-is:             Main.hs
 
-  other-modules:       Network.Bitcoin.ClientSpec
+  other-modules:       Network.Bitcoin.Api.TestUtil
+                       Network.Bitcoin.Api.ClientSpec
+                       Network.Bitcoin.Api.BlockchainSpec
+                       Network.Bitcoin.Api.MiningSpec                       
+                       Network.Bitcoin.Api.WalletSpec                       
+                       Network.Bitcoin.Api.DumpSpec
+                       Network.Bitcoin.Api.MiscSpec                       
                        Spec
                        Main
 
