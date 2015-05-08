@@ -7,14 +7,14 @@ copyright: (c) 2015 Leon Mergen
 author: Leon Mergen
 maintainer: leon@solatis.com
 homepage: http://www.leonmergen.com/opensource.html
-bug-reports: http://github.com/solatis/haskell-bitcoin-script/issues
+bug-reports: http://github.com/solatis/haskell-bitcoin-api/issues
 stability: experimental
 synopsis: Provides access to the RPC API of Bitcoin Core
 description:
    The Bitcoin Core application provides an HTTP RPC interface for communication.
    This library implements access to these functions. It builds on top of the
    `bitcoin-tx` and `bitcoin-script`, and as such provides an extremely flexible
-   environment to create, manipulate and store transactions and custom scripts.         
+   environment to create, manipulate and store transactions and custom scripts.
                       
 build-type: Simple
 data-files: LICENSE, README.md
@@ -96,5 +96,5 @@ test-suite test-suite
 
 source-repository head
   type: git
-  location: git://github.com/solatis/haskell-bitcoin-script.git
+  location: git://github.com/solatis/haskell-bitcoin-api.git
   branch: master
