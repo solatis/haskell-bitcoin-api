@@ -50,11 +50,6 @@ library
                      , lens-aeson
                      , unordered-containers
                      , wreq
-                     , conduit
-                     , transformers
-                     , stm
-                     , stm-chans
-                     , stm-conduit
 
                      , bitcoin-types
                      , bitcoin-block
@@ -86,7 +81,6 @@ test-suite test-suite
                      , http-client
                      , wreq                     
                      , lens
-                     , conduit
                      
                      , hspec
                      
