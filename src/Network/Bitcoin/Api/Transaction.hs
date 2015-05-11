@@ -16,7 +16,7 @@ import           Control.Lens                                 ((^.), (^?))
 import           Control.Monad                                (unless)
 
 import qualified Data.Base58String                            as B58S
-import qualified Data.Bitcoin.Block                           as Btc (Block (..))
+import qualified Data.Bitcoin.Block                           as Btc hiding (encode, decode)
 import qualified Data.Bitcoin.Transaction                     as Btc
 
 import qualified Data.Bitcoin.Types                           as BT
@@ -128,4 +128,4 @@ list client (Just offset) (Just confirmations) = do
   limit  <- Blockchain.getBlockCount client
   blocks <- mapM (Blockchain.getBlock client) =<< mapM (Blockchain.getBlockHash client) [offset..limit - confirmations]
 
-  return $ foldl (\lhs rhs -> lhs ++ Btc.blockTxns rhs) [] blocks
+  return $ foldl (\lhs rhs -> lhs ++ rhs ^. Btc.blockTxns) [] blocks
