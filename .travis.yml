@@ -8,7 +8,10 @@ matrix:
   allow_failures:
    - env: CABALVER=1.22 GHCVER=head
 
-cache: ccache
+cache:
+  directories:
+    - $HOME/.ccache
+    - $HOME/.ghc
      
 before_install:
 # Installing cabal and ghc
