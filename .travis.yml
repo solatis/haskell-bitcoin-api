@@ -48,7 +48,7 @@ script:
  - hlint src --ignore="Parse error"
  - cabal configure --enable-tests --enable-benchmarks
  - cabal build -j
- - run-cabal-test --cabal-name=cabal --show-details=always
+ - travis_retry cabal test --show-details=always
  - cabal check
  - cabal sdist
  
