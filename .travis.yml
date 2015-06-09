@@ -34,7 +34,8 @@ before_install:
  - which bitcoin-cli
  
  - bitcoind -regtest -rpcuser=user -rpcpassword=pass -daemon
-
+# Wait for bitcoin daemon to come online
+ - sleep 10 
 # Bootstrap our Bitcoin wallet with a few generated coints
  - bitcoin-cli -regtest -rpcuser=user -rpcpassword=pass setgenerate true 101
 
