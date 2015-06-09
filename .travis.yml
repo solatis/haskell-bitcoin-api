@@ -1,16 +1,14 @@
 language: c
 env:
- - BITCOINVER=0.10.2 CABALVER=1.22 GHCVER=7.8.4
- - BITCOINVER=0.10.2 CABALVER=1.22 GHCVER=7.10.2
- - BITCOINVER=0.10.2 CABALVER=1.22 GHCVER=head
+ - CABALVER=1.22 GHCVER=7.8.4
+ - CABALVER=1.22 GHCVER=7.10.2
+ - CABALVER=1.22 GHCVER=head
 
 matrix:
   allow_failures:
-   - env: BITCOINVER=0.10.2 CABALVER=1.22 GHCVER=head
+   - env: CABALVER=1.22 GHCVER=head
 
-cache:
-  directories:
-  - bitcoin-0.10.2
+cache: ccache
      
 before_install:
 # Installing cabal and ghc
@@ -25,13 +23,11 @@ before_install:
  - travis_retry sudo apt-get -q -y install hlint || cabal install hlint
 
 # Installing bitcoind and bitcoin-cli from source
+ - ccache -s
  - travis_retry sudo apt-get install -y build-essential libssl-dev libboost-all-dev libdb4.8-dev libdb4.8++-dev libgtk2.0-dev
 
- - travis_retry wget https://bitcoin.org/bin/bitcoin-core-$BITCOINVER/bitcoin-$BITCOINVER.tar.gz
- - if [ ! -d bitcoin-$BITCOINVER ]; then
-    tar -xzf bitcoin-$BITCOINVER.tar.gz && cd bitcoin-$BITCOINVER && ./configure --disable-tests --with-gui=no && make && cd ..;
-   fi
- - cd bitcoin-$BITCOINVER && sudo make install && cd ..
+ - travis_retry wget https://bitcoin.org/bin/bitcoin-core-0.10.2/bitcoin-0.10.2.tar.gz
+ - tar -xzf bitcoin-0.10.2.tar.gz && cd bitcoin-0.10.2 && ./configure --disable-tests --with-gui=no && make && sudo make install && cd ..
  - which bitcoind
  - which bitcoin-cli
  
