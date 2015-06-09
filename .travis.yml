@@ -45,7 +45,7 @@ install:
 
 script:
  - hlint src --ignore="Parse error"
- - cabal configure --enable-tests --enable-benchmarks --enable-library-coverage
+ - cabal configure --enable-tests --enable-benchmarks
  - cabal build -j
  - run-cabal-test --cabal-name=cabal --show-details=always
  - cabal check
@@ -63,5 +63,4 @@ script:
    cd ../
 
 after_script:
- - hpc-coveralls test-suite --exclude-dir=test --display-report
  - ccache -s
