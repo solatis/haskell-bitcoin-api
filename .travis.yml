@@ -36,11 +36,6 @@ before_install:
  
  - bitcoind -regtest -rpcuser=user -rpcpassword=pass -daemon
 
-# Install hpc-coveralls
- - travis_retry cabal sandbox init
- - cabal install hpc-coveralls -j --bindir=$HOME/.cabal/bin/ --constraint='aeson >= 0.7'
- - cabal sandbox delete
-
 # Bootstrap our Bitcoin wallet with a few generated coints
  - bitcoin-cli -regtest -rpcuser=user -rpcpassword=pass setgenerate true 101
 
