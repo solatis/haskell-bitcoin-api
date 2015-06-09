@@ -65,3 +65,4 @@ script:
 
 after_script:
  - hpc-coveralls test-suite --exclude-dir=test --display-report
+ - ccache -s
