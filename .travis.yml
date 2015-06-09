@@ -11,8 +11,6 @@ matrix:
 cache:
   directories:
     - $HOME/.ccache
-    - $HOME/.cabal
-    - $HOME/.ghc
      
 before_install:
 # Installing cabal and ghc
