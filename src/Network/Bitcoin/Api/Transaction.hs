@@ -13,8 +13,6 @@ import           Data.Maybe                                   (fromMaybe)
 
 import           Control.Lens                                 ((^.), (^?))
 
-import           Control.Monad                                (unless)
-
 import qualified Data.Base58String                            as B58S
 import qualified Data.Bitcoin.Block                           as Btc hiding (encode, decode)
 import qualified Data.Bitcoin.Transaction                     as Btc
