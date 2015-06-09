@@ -44,6 +44,15 @@ listAccountsWith client confirmations watchOnly =
   in
     return . HM.toList =<< I.call client "listaccounts" configuration
 
+-- | Returns the amount of Btc currently held in the wallet by a specified
+--   account.
+getAccountBalance :: T.Client         -- | Our client context
+                  -> BT.Account       -- | The account we're looking for
+                  -> IO BT.Btc        -- | Amount of Btc in wallet
+getAccountBalance client accountId =
+  -- FIXME: we should use the native 'getbalance' function here
+  return . snd . head . filter ((== accountId) . fst) =<< listAccounts client
+
 -- | Provides access to a new receiving address filed under the default account.
 --   Intended to be published to another party that wishes to send you money.
 newAddress :: T.Client         -- ^ Our client context
