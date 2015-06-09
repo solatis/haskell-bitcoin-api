@@ -13,5 +13,5 @@ spec = do
    it "should be able to return server info" $ do
      r <- testClient Misc.getInfo
 
-     r ^. Misc.bitcoinVersion `shouldBe` 100100
+     r ^. Misc.bitcoinVersion `shouldBe` 100200
      r ^. Misc.bitcoindErrors `shouldBe` (T.pack "")
