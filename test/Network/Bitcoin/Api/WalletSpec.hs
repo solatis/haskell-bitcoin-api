@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Network.Bitcoin.Api.WalletSpec where
 
 import qualified Data.List                                    as L (find)
@@ -44,6 +46,17 @@ spec = do
    it "should be able to create a change address" $ do
      testClient $ \client -> do
        addr <- Wallet.newChangeAddress client
-       acc <-  Wallet.getAddressAccount client addr
 
+       acc <-  Wallet.getAddressAccount client addr
        acc `shouldBe` (T.pack "")
+
+   it "should be able to move from one account to another" $ do
+     testClient $ \client -> do
+       _ <- Wallet.newAddressWith client (T.pack "testAccount")
+       balance <- Wallet.getAccountBalance client ("")
+
+       _ <- Wallet.move client "" "testAccount" 1 `shouldReturn` True
+
+       -- Validate that, after the move, our main account's balance has been
+       -- reduced with exactly 1 BTC (which is the amount we're moving).
+       Wallet.getAccountBalance client ("") `shouldReturn` (balance - 1)

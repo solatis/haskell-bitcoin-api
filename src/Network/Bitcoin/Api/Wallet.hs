@@ -6,7 +6,6 @@ import           Data.Aeson
 import           Data.Aeson.Types
 
 import qualified Data.HashMap.Strict                          as HM
-import qualified Data.Text                                    as T
 
 import qualified Data.Bitcoin.Types                           as BT
 import qualified Network.Bitcoin.Api.Internal                 as I
@@ -67,7 +66,6 @@ newAddressWith :: T.Client      -- ^ Our client context
                -> IO BT.Address -- ^ The address created
 newAddressWith client account =
   let configuration = [account]
-
   in I.call client "getnewaddress" configuration
 
 -- | Provides access to a new change address, which will not appear in the UI.
@@ -84,3 +82,14 @@ getAddressAccount :: T.Client
 getAddressAccount client address =
   let configuration = [address]
   in I.call client "getaccount" configuration
+
+-- | Creates an off-blockchain transaction that moves bitcoin within a wallet
+--   from one account to another.
+move :: T.Client   -- ^ Our client context
+     -> BT.Account -- ^ Account moving btc from
+     -> BT.Account -- ^ Account moving btc to
+     -> BT.Btc     -- ^ Amount of btc to move
+     -> IO Bool    -- ^ Returns True if move was succesful
+move client from to btc =
+  let configuration = [toJSON from, toJSON to, toJSON btc]
+  in I.call client "move" configuration
