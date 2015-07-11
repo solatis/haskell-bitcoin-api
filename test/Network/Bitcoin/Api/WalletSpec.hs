@@ -30,17 +30,17 @@ spec = do
 
    it "should be able to create a new address under a specific account" $ do
      testClient $ \client -> do
-       addr <- Wallet.newAddressWith client (T.pack "testAccount")
+       addr <- Wallet.newAddressWith client (T.pack "emptyTestAccount")
        acc  <- Wallet.getAddressAccount client addr
 
-       acc `shouldBe` (T.pack "testAccount")
+       acc `shouldBe` (T.pack "emptyTestAccount")
 
        -- Extra validation that the account also appears in the wallet
        list <- Wallet.listAccounts client
-       L.find (\(needle, _) -> needle == T.pack "testAccount") list `shouldSatisfy` isJust
+       L.find (\(needle, _) -> needle == T.pack "emptyTestAccount") list `shouldSatisfy` isJust
 
        -- Extra validation that we can look up the balance of the account
-       balance <- Wallet.getAccountBalance client (T.pack "testAccount")
+       balance <- Wallet.getAccountBalance client (T.pack "emptyTestAccount")
        balance `shouldBe` 0
 
    it "should be able to create a change address" $ do
