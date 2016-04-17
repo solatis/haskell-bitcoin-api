@@ -15,15 +15,16 @@ import           Network.Bitcoin.Api.Types.UnspentTransaction (UnspentTransactio
 -- | Lists unspent transaction with default parameters
 listUnspent :: T.Client
             -> IO [UnspentTransaction]
-listUnspent client = listUnspentWith client 1 9999999
+listUnspent client = listUnspentWith client 1 9999999 []
 
 -- | Lists unspent transactions with configurable parameters
-listUnspentWith :: T.Client -- ^ Our client context
-                -> Integer  -- ^ Minimum amount of confirmations needed. Defaults to 1.
-                -> Integer  -- ^ Maximum amount of confirmations. Defaults to 9999999.
+listUnspentWith :: T.Client     -- ^ Our client context
+                -> Integer      -- ^ Minimum amount of confirmations needed. Defaults to 1.
+                -> Integer      -- ^ Maximum amount of confirmations. Defaults to 9999999.
+                -> [BT.Address] -- ^ Return only results relevant to these addresses
                 -> IO [UnspentTransaction]
-listUnspentWith client confMin confMax =
-  let configuration = [toJSON confMin, toJSON confMax, emptyArray]
+listUnspentWith client confMin confMax addrList =
+  let configuration = [toJSON confMin, toJSON confMax, toJSON addrList]
 
   in I.call client "listunspent" configuration
 
