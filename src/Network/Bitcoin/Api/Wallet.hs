@@ -93,3 +93,14 @@ move :: T.Client   -- ^ Our client context
 move client from to btc =
   let configuration = [toJSON from, toJSON to, toJSON btc]
   in I.call client "move" configuration
+
+
+-- | Imports address into wallet, enabling showing the balance using 'listUnspent'
+importAddress   :: T.Client   -- ^ Our client context
+                -> BT.Address -- ^ Address to import
+                -> BT.Account -- ^ Account with which the address will be associated
+                -> Bool       -- ^ Rescan blockchain? (will take a while) default=True
+                -> IO Value   -- ^ Returns nothing if everything went alright (as far as I can tell)
+importAddress client address label rescan =
+    let configuration = [toJSON address, toJSON label, toJSON rescan]
+    in I.call client "importaddress" configuration
