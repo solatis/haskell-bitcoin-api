@@ -105,3 +105,12 @@ importAddress   :: T.Client   -- ^ Our client context
 importAddress client address label rescan =
     let configuration = [toJSON address, toJSON label, toJSON rescan]
     in I.call client "importaddress" configuration
+
+-- | Send amount to specified address, returning transaction ID of resulting Tx
+sendToAddress :: T.Client
+              -> BT.Address
+              -> BT.Btc
+              -> IO BT.TransactionId
+sendToAddress client address amount =
+    let configuration = [toJSON address, toJSON amount]
+    in I.call client "sendtoaddress" configuration
