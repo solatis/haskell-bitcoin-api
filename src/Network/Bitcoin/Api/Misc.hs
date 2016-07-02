@@ -87,3 +87,4 @@ instance FromJSON BitcoinInfo where
 getInfo :: T.Client -> IO BitcoinInfo
 getInfo client =
   I.call client "getinfo" emptyArray
+
