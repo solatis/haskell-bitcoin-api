@@ -8,7 +8,7 @@ module Network.Bitcoin.Api.Types.TxInfo where
 import           Control.Monad       (mzero)
 
 import qualified Data.Base58String   as B58S
-import           Data.Word           (Word32)
+import           Data.Word           (Word32, Word64)
 
 import           Data.Aeson
 import           Data.Aeson.Types
@@ -25,6 +25,7 @@ data TxInfo = TxInfo {
   ,vouts       :: [Vout]
   ,confs       :: Integer
   ,blockhash   :: BT.BlockHash
+  ,timestamp   :: Word64
 } deriving (Eq, Show)
 
 
@@ -36,6 +37,7 @@ instance FromJSON TxInfo where
       <*> o .: "vout"
       <*> o .: "confirmations"
       <*> o .: "blockhash"
+      <*> o .: "time"
   parseJSON _          = mzero
 
 
