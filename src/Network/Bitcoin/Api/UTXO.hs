@@ -13,10 +13,10 @@ type IncludeMempool = Bool
 
 -- | Returns details about an unspent transaction output.
 getTxOut :: T.Client     -- ^ Our session context
-         -> BT.TransactionId        -- ^ Transaction ID of transaction containing output
-         -> Word32                  -- ^ Vout/index of output in transaction
-         -> IncludeMempool          -- ^ Return transaction outputs from unconfirmed transactions as well?
-         -> IO UTXO.UnspentTxOut    -- ^ The unspent transaction output
+         -> BT.TransactionId                -- ^ Transaction ID of transaction containing output
+         -> Word32                          -- ^ Vout/index of output in transaction
+         -> IncludeMempool                  -- ^ Return transaction outputs from unconfirmed transactions as well?
+         -> IO (Maybe UTXO.UnspentTxOut)    -- ^ The unspent transaction output, if present in UTXO set
 getTxOut client txid index includeMempool =
   let configuration = [toJSON txid, toJSON index, toJSON includeMempool]
 
