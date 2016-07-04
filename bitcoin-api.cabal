@@ -29,6 +29,7 @@ library
   exposed-modules:     Network.Bitcoin.Api.Client
                        Network.Bitcoin.Api.Types
                        Network.Bitcoin.Api.Types.UnspentTransaction
+                       Network.Bitcoin.Api.Types.TxInfo
                        Network.Bitcoin.Api.Blockchain
                        Network.Bitcoin.Api.Dump
                        Network.Bitcoin.Api.Mining
