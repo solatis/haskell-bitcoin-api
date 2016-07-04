@@ -1,10 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell   #-}
 
 module Network.Bitcoin.Api.Types.TxInfo where
 
--- import           Control.Applicative ((<$>), (<*>))
--- import           Control.Lens.TH     (makeLenses)
 import           Control.Monad       (mzero)
 
 import qualified Data.Base58String   as B58S
@@ -14,9 +11,7 @@ import           Data.Aeson
 import           Data.Aeson.Types
 
 import qualified Data.Bitcoin.Types  as BT
--- import qualified Data.Bitcoin.Transaction as Tx
 
--- import qualified Data.Text           as T
 
 
 data TxInfo = TxInfo {
@@ -47,16 +42,13 @@ data Vout = Vout {
   ,addresses   :: [B58S.Base58String]
 } deriving (Eq, Show)
 
-parseScriptPubKey :: Value -> Parser [B58S.Base58String]
-parseScriptPubKey (Object o) = o .: "addresses"
-parseScriptPubKey _ = mzero
 
 instance FromJSON Vout where
   parseJSON (Object o) =
     Vout
       <$> o .:  "value"
       <*> o .:  "n"
-      <*> ( (o .:  "scriptPubKey") >>= parseScriptPubKey )
+      <*> ( (o .:  "scriptPubKey") >>= (.: "addresses") )
   parseJSON _          = mzero
 
 data Vin = Vin {

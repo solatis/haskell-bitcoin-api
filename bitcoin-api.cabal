@@ -30,12 +30,15 @@ library
                        Network.Bitcoin.Api.Types
                        Network.Bitcoin.Api.Types.UnspentTransaction
                        Network.Bitcoin.Api.Types.TxInfo
+                       Network.Bitcoin.Api.Types.UnspentTxOut
                        Network.Bitcoin.Api.Blockchain
                        Network.Bitcoin.Api.Dump
                        Network.Bitcoin.Api.Mining
                        Network.Bitcoin.Api.Misc
                        Network.Bitcoin.Api.Transaction
                        Network.Bitcoin.Api.Wallet
+                       Network.Bitcoin.Api.UTXO
+
 
   other-modules:       Network.Bitcoin.Api.Internal
                          
