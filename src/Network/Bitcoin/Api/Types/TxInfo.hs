@@ -25,15 +25,15 @@ data TxInfo = TxInfo {
 
 
 instance FromJSON TxInfo where
-  parseJSON (Object o) =
-    TxInfo
-      <$> o .: "txid"
-      <*> o .: "vin"
-      <*> o .: "vout"
-      <*> o .: "confirmations"
-      <*> o .: "blockhash"
-      <*> o .: "time"
+  parseJSON (Object o) = TxInfo
+         <$> o .: "txid"
+         <*> o .: "vin"
+         <*> o .: "vout"
+         <*> o .: "confirmations"
+         <*> o .: "blockhash"
+         <*> o .: "time"
   parseJSON _          = mzero
+
 
 
 data Vout = Vout {
@@ -51,15 +51,18 @@ instance FromJSON Vout where
       <*> ( (o .:  "scriptPubKey") >>= (.: "addresses") )
   parseJSON _          = mzero
 
-data Vin = Vin {
-    ref_txid        :: BT.TransactionId
-   ,ref_index       :: Word32
-} deriving (Eq, Show)
+data Vin =
+    Vin {
+        ref_txid        :: BT.TransactionId
+      , ref_index       :: Word32
+    } |
+    CoinbaseVin -- A Coinbase transaction is the first transaction in a block
+        deriving (Eq, Show)
 
 instance FromJSON Vin where
     parseJSON (Object o) = o .:! "txid" >>=
         \maybeTxId -> case maybeTxId of
-            Nothing -> return []                    -- no "prev_txid" if coinbase tx
-            Just txid ->  Vin txid <*> o .: "vout"
+            Nothing -> return CoinbaseVin
+            Just txid -> Vin txid <$> o .: "vout"
     parseJSON _          = mzero
 
