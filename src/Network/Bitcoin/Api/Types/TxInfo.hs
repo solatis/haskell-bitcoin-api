@@ -28,7 +28,7 @@ instance FromJSON TxInfo where
   parseJSON (Object o) =
     TxInfo
       <$> o .: "txid"
-      <*> o .: "vin"
+      <*> o .:? "vin" .!= []    -- In case of Coinbase transactions, we have no inputs
       <*> o .: "vout"
       <*> o .: "confirmations"
       <*> o .: "blockhash"

@@ -7,6 +7,8 @@ import           Control.Lens              ((^.))
 import           Control.Monad             (mzero)
 import qualified Network.Wreq              as W
 import qualified Network.Wreq.Session      as WS
+import qualified Network.HTTP.Client       as HTTP
+import qualified Network.HTTP.Types.Status as TypeHTTP
 
 import           Data.Aeson
 import qualified Data.HashMap.Strict       as HM
@@ -37,8 +39,8 @@ instance FromJSON a => FromJSON (RpcResult a) where
 instance FromJSON RpcError where
   parseJSON (Object o) =
     RpcError <$> o .: "code" <*> o .: "message"
-
   parseJSON _ = mzero
+
 
 call :: ( ToJSON a
         , FromJSON b
@@ -54,8 +56,11 @@ call client method params =
                        , "id"      .= (1 :: Int)]
 
       call' = do
---         putStrLn ("Now sending JSON command: " ++ show (encode command))
-        r <- W.asJSON =<< WS.postWith (T.clientOpts client) (T.clientSession client) (T.clientUrl client) command
+        r <- W.asJSON =<< WS.postWith
+                (T.clientOpts client)
+                (T.clientSession client)
+                (T.clientUrl client)
+                command
         return (r ^. W.responseBody)
 
   in do

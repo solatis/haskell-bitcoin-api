@@ -60,6 +60,9 @@ library
                      , bitcoin-tx                     
                      , bitcoin-script
 
+                     , http-client
+                     , http-types
+
 test-suite test-suite
   type:                exitcode-stdio-1.0
   ghc-options:         -Wall -ferror-spans -threaded -auto-all -caf-all -fno-warn-type-defaults
