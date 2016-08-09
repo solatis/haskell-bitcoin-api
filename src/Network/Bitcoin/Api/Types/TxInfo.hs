@@ -28,7 +28,7 @@ instance FromJSON TxInfo where
   parseJSON (Object o) =
     TxInfo
       <$> o .: "txid"
-      <*> o .:? "vin" .!= []    -- In case of Coinbase transactions, we have no inputs
+      <*> o .: "vin"
       <*> o .: "vout"
       <*> o .: "confirmations"
       <*> o .: "blockhash"
@@ -57,9 +57,9 @@ data Vin = Vin {
 } deriving (Eq, Show)
 
 instance FromJSON Vin where
-    parseJSON (Object o) =
-        Vin
-            <$> o .: "txid"
-            <*> o .: "vout"
+    parseJSON (Object o) = o .:! "txid" >>=
+        \maybeTxId -> case maybeTxId of
+            Nothing -> return []                    -- no "prev_txid" if coinbase tx
+            Just txid ->  Vin txid <*> o .: "vout"
     parseJSON _          = mzero
 
