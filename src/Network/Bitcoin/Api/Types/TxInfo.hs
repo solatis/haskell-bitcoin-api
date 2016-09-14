@@ -48,7 +48,9 @@ instance FromJSON Vout where
     Vout
       <$> o .:  "value"
       <*> o .:  "n"
-      <*> ( (o .:  "scriptPubKey") >>= (.: "addresses") )
+      <*> ( (o .:  "scriptPubKey") >>= getOptAddr )
+    where
+      getOptAddr o' = o' .:? "addresses" .!= []
   parseJSON _          = mzero
 
 data Vin =
