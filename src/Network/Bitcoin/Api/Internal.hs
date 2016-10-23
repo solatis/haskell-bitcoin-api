@@ -2,17 +2,15 @@
 
 module Network.Bitcoin.Api.Internal where
 
-import           Control.Applicative       ((<$>))
 import           Control.Lens              ((^.))
 import           Control.Monad             (mzero)
 import qualified Network.Wreq              as W
 import qualified Network.Wreq.Session      as WS
-import qualified Network.HTTP.Client       as HTTP
-import qualified Network.HTTP.Types.Status as TypeHTTP
 
 import           Data.Aeson
 import qualified Data.HashMap.Strict       as HM
 
+import qualified Data.ByteString.Lazy      as BL
 import qualified Data.Text                 as T
 import qualified Network.Bitcoin.Api.Types as T
 
@@ -69,3 +67,20 @@ call client method params =
     case res of
      (RpcResultError err) -> fail ("An error occured: " ++ show err)
      (RpcResultOk obj) -> return obj
+
+callRaw :: ( ToJSON a )
+        => T.Client -- ^ Our client context
+        -> String   -- ^ The command we wish to execute
+        -> a        -- ^ The parameters we wish to provide
+        -> IO BL.ByteString -- ^ Raw JSON response from bitcoind
+callRaw client method params = do
+    r <- WS.postWith
+            (T.clientOpts client)
+            (T.clientSession client)
+            (T.clientUrl client)
+            command
+    return (r ^. W.responseBody)
+    where command = object [ "jsonrpc" .= T.pack "2.0"
+                           , "method"  .= T.pack method
+                           , "params"  .= params
+                           , "id"      .= (1 :: Int)]
