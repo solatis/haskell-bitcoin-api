@@ -18,10 +18,22 @@ data HeaderInfo = HeaderInfo
    , height          :: Integer
    , mediantime      :: Word32
    , difficulty      :: Double
-   , nextblockhash   :: BT.BlockHash
+   , nextblockhash   :: Maybe BT.BlockHash
    , chainwork       :: BT.BlockHash
    } deriving
-        (Eq, Show, Generic, FromJSON, ToJSON)
+        (Eq, Show) -- , Generic, FromJSON, ToJSON)
+
+
+instance FromJSON TxInfo where
+  parseJSON = withObject "TxInfo" $ \o -> TxInfo
+     <$> o .:  "hash"
+     <*> o .:  "confirmations"
+     <*> o .:  "height"
+     <*> o .:  "mediantime"
+     <*> o .:  "difficulty"
+     <*> o .:? "nextblockhash"
+     <*> o .:  "chainwork"
+
 
 -- parseBlockHeader :: Value -> Parser Btc.BlockHeader
 -- parseBlockHeader = withObject "BlockHeader" $ \o ->
