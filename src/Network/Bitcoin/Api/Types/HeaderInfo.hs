@@ -24,8 +24,8 @@ data HeaderInfo = HeaderInfo
         (Eq, Show) -- , Generic, FromJSON, ToJSON)
 
 
-instance FromJSON TxInfo where
-  parseJSON = withObject "TxInfo" $ \o -> TxInfo
+instance FromJSON HeaderInfo where
+  parseJSON = withObject "HeaderInfo" $ \o -> HeaderInfo
      <$> o .:  "hash"
      <*> o .:  "confirmations"
      <*> o .:  "height"
