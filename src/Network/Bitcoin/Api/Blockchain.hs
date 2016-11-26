@@ -36,7 +36,7 @@ getBlock :: T.Client     -- ^ Our session context
 getBlock client hash =
   let configuration = [toJSON hash, toJSON False]
 
-  in (return . Btc.decode) =<< I.call client "getblock" configuration
+  in Btc.decode <$> I.call client "getblock" configuration
 
 
 -- | NOTE: Only applicable for Bitcoin Core with the addrindex patch
@@ -47,4 +47,13 @@ searchRawTransactions ::
     -> IO [TXI.TxInfo]   -- ^ List of TxInfo's either paying to or redeeming address
 searchRawTransactions client addr =
   I.call client "searchrawtransactions" [toJSON addr]
+
+-- | NOTE: Requires enabled transaction index in Bitcoin Core ("txindex" option)
+--      Fetch hex-encoded transaction by transaction ID
+getRawTransaction ::
+    T.Client             -- ^ Our session context
+    -> BT.TransactionId  -- ^ Transaction ID of transaction to fetch
+    -> IO HS.HexString   -- ^ Hex-encoded transaction
+getRawTransaction client txid =
+  I.call client "getrawtransaction" [toJSON txid, toJSON False]
 
