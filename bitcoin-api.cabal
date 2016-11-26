@@ -31,6 +31,7 @@ library
                        Network.Bitcoin.Api.Types.UnspentTransaction
                        Network.Bitcoin.Api.Types.TxInfo
                        Network.Bitcoin.Api.Types.UnspentTxOut
+                       Network.Bitcoin.Api.Types.HeaderInfo
                        Network.Bitcoin.Api.Blockchain
                        Network.Bitcoin.Api.Dump
                        Network.Bitcoin.Api.Mining

@@ -5,14 +5,14 @@ module Network.Bitcoin.Api.Blockchain where
 import           Data.Aeson
 import           Data.Aeson.Types                   (emptyArray)
 
-import qualified Data.HexString                     as HS
-import qualified Data.Bitcoin.Block                 as Btc
-
-import qualified Data.Bitcoin.Types                 as BT
-import qualified Network.Bitcoin.Api.Internal       as I
-import qualified Network.Bitcoin.Api.Types          as T
-import qualified Network.Bitcoin.Api.Types.TxInfo   as TXI
-import qualified Data.Base58String                  as B58S
+import qualified Data.HexString                         as HS
+import qualified Data.Bitcoin.Block                     as Btc
+import qualified Data.Bitcoin.Types                     as BT
+import qualified Network.Bitcoin.Api.Internal           as I
+import qualified Network.Bitcoin.Api.Types              as T
+import qualified Network.Bitcoin.Api.Types.TxInfo       as TXI
+import qualified Network.Bitcoin.Api.Types.HeaderInfo   as HDI
+import qualified Data.Base58String                      as B58S
 
 -- | Gets the amount of blocks currently in the blockchain, also known as the
 --   'height' of the blockchain.
@@ -44,6 +44,16 @@ getBlockHeader :: T.Client  -- ^ Our session context
          -> IO HS.HexString -- ^ Hex-encoded block header
 getBlockHeader client hash =
   let configuration = [toJSON hash, toJSON False]
+
+  in I.call client "getblockheader" configuration
+
+-- | Gets information about a block header based its hash.
+getBlockHeaderInfo
+         :: T.Client            -- ^ Our session context
+         -> HS.HexString        -- ^ Hexadecimal representation of the hash of a block
+         -> IO HDI.HeaderInfo   -- ^ Block information
+getBlockHeaderInfo client hash =
+  let configuration = [toJSON hash, toJSON True]
 
   in I.call client "getblockheader" configuration
 
