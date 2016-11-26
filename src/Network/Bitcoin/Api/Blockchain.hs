@@ -38,6 +38,14 @@ getBlock client hash =
 
   in Btc.decode <$> I.call client "getblock" configuration
 
+-- | Gets a block header based on its hash.
+getBlockHeader :: T.Client  -- ^ Our session context
+         -> HS.HexString    -- ^ Hexadecimal representation of the hash of a block
+         -> IO HS.HexString -- ^ Hex-encoded block header
+getBlockHeader client hash =
+  let configuration = [toJSON hash, toJSON False]
+
+  in I.call client "getblockheader" configuration
 
 -- | NOTE: Only applicable for Bitcoin Core with the addrindex patch
 --      Fetch information about transactions paying to or redeeming specified address
