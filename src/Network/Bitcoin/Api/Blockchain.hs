@@ -73,5 +73,5 @@ getRawTransaction ::
     -> BT.TransactionId  -- ^ Transaction ID of transaction to fetch
     -> IO HS.HexString   -- ^ Hex-encoded transaction
 getRawTransaction client txid =
-  I.call client "getrawtransaction" [toJSON txid, toJSON False]
+  I.call client "getrawtransaction" [toJSON txid, toJSON (0 :: Integer)]
 
