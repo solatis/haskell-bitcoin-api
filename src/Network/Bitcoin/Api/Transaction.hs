@@ -9,7 +9,7 @@ module Network.Bitcoin.Api.Transaction where
 
 import           Data.Aeson
 import           Data.Aeson.Lens
-import           Data.Maybe                                   (fromMaybe)
+import           Data.Maybe                                   (fromMaybe, catMaybes)
 
 import           Control.Lens                                 ((^.), (^?))
 
@@ -126,4 +126,4 @@ list client (Just offset) (Just confirmations) = do
   limit  <- Blockchain.getBlockCount client
   blocks <- mapM (Blockchain.getBlock client) =<< mapM (Blockchain.getBlockHash client) [offset..limit - confirmations]
 
-  return $ foldl (\lhs rhs -> lhs ++ rhs ^. Btc.blockTxns) [] blocks
+  return $ foldl (\lhs rhs -> lhs ++ rhs ^. Btc.blockTxns) [] (catMaybes blocks)

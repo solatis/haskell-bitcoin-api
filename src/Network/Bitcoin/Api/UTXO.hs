@@ -1,6 +1,6 @@
 module Network.Bitcoin.Api.UTXO where
 
-import           Data.Word           (Word32, Word64)
+import           Data.Word           (Word32)
 import           Data.Maybe          (maybeToList)
 import           Data.Aeson
 
@@ -8,7 +8,6 @@ import qualified Data.Bitcoin.Types                     as BT
 import qualified Network.Bitcoin.Api.Internal           as I
 import qualified Network.Bitcoin.Api.Types              as T
 import qualified Network.Bitcoin.Api.Types.UnspentTxOut as UTXO
-import qualified Data.Base58String                      as B58S
 import qualified Data.HexString                         as HS
 
 type IncludeMempool = Bool

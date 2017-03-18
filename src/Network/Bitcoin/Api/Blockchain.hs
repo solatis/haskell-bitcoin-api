@@ -32,30 +32,30 @@ getBlockHash client offset =
 -- | Gets a block based on its hash.
 getBlock :: T.Client     -- ^ Our session context
          -> HS.HexString -- ^ Hexadecimal representation of the hash of a block
-         -> IO Btc.Block -- ^ The block
+         -> IO (Maybe Btc.Block) -- ^ The block
 getBlock client hash =
   let configuration = [toJSON hash, toJSON False]
 
-  in Btc.decode <$> I.call client "getblock" configuration
+  in fmap Btc.decode <$> I.callMaybe client "getblock" configuration
 
 -- | Gets a block header based on its hash.
-getBlockHeader :: T.Client  -- ^ Our session context
-         -> HS.HexString    -- ^ Hexadecimal representation of the hash of a block
-         -> IO HS.HexString -- ^ Hex-encoded block header
+getBlockHeader :: T.Client          -- ^ Our session context
+         -> HS.HexString            -- ^ Hexadecimal representation of the hash of a block
+         -> IO (Maybe HS.HexString) -- ^ Hex-encoded block header
 getBlockHeader client hash =
   let configuration = [toJSON hash, toJSON False]
 
-  in I.call client "getblockheader" configuration
+  in I.callMaybe client "getblockheader" configuration
 
 -- | Gets information about a block header based its hash.
 getBlockHeaderInfo
-         :: T.Client            -- ^ Our session context
-         -> HS.HexString        -- ^ Hexadecimal representation of the hash of a block
-         -> IO HDI.HeaderInfo   -- ^ Block information
+         :: T.Client                    -- ^ Our session context
+         -> HS.HexString                -- ^ Hexadecimal representation of the hash of a block
+         -> IO (Maybe HDI.HeaderInfo)   -- ^ Block information
 getBlockHeaderInfo client hash =
   let configuration = [toJSON hash, toJSON True]
 
-  in I.call client "getblockheader" configuration
+  in I.callMaybe client "getblockheader" configuration
 
 -- | NOTE: Only applicable for Bitcoin Core with the addrindex patch
 --      Fetch information about transactions paying to or redeeming specified address
@@ -69,9 +69,9 @@ searchRawTransactions client addr =
 -- | NOTE: Requires enabled transaction index in Bitcoin Core ("txindex" option)
 --      Fetch hex-encoded transaction by transaction ID
 getRawTransaction ::
-    T.Client             -- ^ Our session context
-    -> BT.TransactionId  -- ^ Transaction ID of transaction to fetch
-    -> IO HS.HexString   -- ^ Hex-encoded transaction
+    T.Client                    -- ^ Our session context
+    -> BT.TransactionId         -- ^ Transaction ID of transaction to fetch
+    -> IO (Maybe HS.HexString)  -- ^ Hex-encoded transaction
 getRawTransaction client txid =
-  I.call client "getrawtransaction" [toJSON txid, toJSON (0 :: Integer)]
+  I.callMaybe client "getrawtransaction" [toJSON txid, toJSON (0 :: Integer)]
 
