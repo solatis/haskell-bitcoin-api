@@ -15,15 +15,16 @@ import           Network.Bitcoin.Api.Types.UnspentTransaction (UnspentTransactio
 -- | Lists unspent transaction with default parameters
 listUnspent :: T.Client
             -> IO [UnspentTransaction]
-listUnspent client = listUnspentWith client 1 9999999
+listUnspent client = listUnspentWith client 1 9999999 []
 
 -- | Lists unspent transactions with configurable parameters
-listUnspentWith :: T.Client -- ^ Our client context
-                -> Integer  -- ^ Minimum amount of confirmations needed. Defaults to 1.
-                -> Integer  -- ^ Maximum amount of confirmations. Defaults to 9999999.
+listUnspentWith :: T.Client     -- ^ Our client context
+                -> Integer      -- ^ Minimum amount of confirmations needed. Defaults to 1.
+                -> Integer      -- ^ Maximum amount of confirmations. Defaults to 9999999.
+                -> [BT.Address] -- ^ Return only results relevant to these addresses
                 -> IO [UnspentTransaction]
-listUnspentWith client confMin confMax =
-  let configuration = [toJSON confMin, toJSON confMax, emptyArray]
+listUnspentWith client confMin confMax addrList =
+  let configuration = [toJSON confMin, toJSON confMax, toJSON addrList]
 
   in I.call client "listunspent" configuration
 
@@ -93,3 +94,23 @@ move :: T.Client   -- ^ Our client context
 move client from to btc =
   let configuration = [toJSON from, toJSON to, toJSON btc]
   in I.call client "move" configuration
+
+
+-- | Imports address into wallet, enabling showing the balance using 'listUnspent'
+importAddress   :: T.Client   -- ^ Our client context
+                -> BT.Address -- ^ Address to import
+                -> BT.Account -- ^ Account with which the address will be associated
+                -> Bool       -- ^ Rescan blockchain? (will take a while) default=True
+                -> IO Value   -- ^ Returns nothing if everything went alright (as far as I can tell)
+importAddress client address label rescan =
+    let configuration = [toJSON address, toJSON label, toJSON rescan]
+    in I.call client "importaddress" configuration
+
+-- | Send amount to specified address, returning transaction ID of resulting Tx
+sendToAddress :: T.Client
+              -> BT.Address
+              -> BT.Btc
+              -> IO BT.TransactionId
+sendToAddress client address amount =
+    let configuration = [toJSON address, toJSON amount]
+    in I.call client "sendtoaddress" configuration

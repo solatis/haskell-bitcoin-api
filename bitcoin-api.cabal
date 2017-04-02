@@ -1,94 +1,103 @@
-name: bitcoin-api
-category: Network, Finance
-version: 0.12.1
-license: MIT
-license-file: LICENSE
-copyright: (c) 2015 Leon Mergen
-author: Leon Mergen
-maintainer: leon@solatis.com
-homepage: http://www.leonmergen.com/opensource.html
-bug-reports: http://github.com/solatis/haskell-bitcoin-api/issues
-stability: experimental
-synopsis: Provides access to the RPC API of Bitcoin Core
-description:
-   The Bitcoin Core application provides an HTTP RPC interface for communication.
-   This library implements access to these functions. It builds on top of the
-   `bitcoin-tx` and `bitcoin-script`, and as such provides an extremely flexible
-   environment to create, manipulate and store transactions and custom scripts.
-                      
-build-type: Simple
-data-files: LICENSE, README.md
-cabal-version: >= 1.10
-tested-with: GHC == 7.6, GHC == 7.8, GHC == 7.10
+-- This file has been generated from package.yaml by hpack version 0.15.0.
+--
+-- see: https://github.com/sol/hpack
 
-library
-  hs-source-dirs:      src
-  ghc-options:         -Wall -ferror-spans
-  default-language:    Haskell2010
+name:           bitcoin-api
+category:       Network, Finance
+version:        0.12.1
+license:        MIT
+license-file:   LICENSE
+copyright:      (c) 2015 Leon Mergen
+author:         Leon Mergen
+maintainer:     leon@solatis.com
+homepage:       http://www.leonmergen.com/opensource.html
+bug-reports:    http://github.com/solatis/haskell-bitcoin-api/issues
+stability:      experimental
+synopsis:       Provides access to the RPC API of Bitcoin Core
+description:    The Bitcoin Core application provides an HTTP RPC interface for communication.
+                This library implements access to these functions. It builds on top of the
+                `bitcoin-tx` and `bitcoin-script`, and as such provides an extremely flexible
+                environment to create, manipulate and store transactions and custom scripts.
+build-type:     Simple
+cabal-version:  >= 1.10
+tested-with:    GHC==7.6 GHC==7.8 GHC==7.10
 
-  exposed-modules:     Network.Bitcoin.Api.Client
-                       Network.Bitcoin.Api.Types
-                       Network.Bitcoin.Api.Types.UnspentTransaction
-                       Network.Bitcoin.Api.Blockchain
-                       Network.Bitcoin.Api.Dump
-                       Network.Bitcoin.Api.Mining
-                       Network.Bitcoin.Api.Misc
-                       Network.Bitcoin.Api.Transaction
-                       Network.Bitcoin.Api.Wallet
-
-  other-modules:       Network.Bitcoin.Api.Internal
-                         
-  build-depends:       base                     >= 4.3          && < 5
-                     , text
-                     , bytestring
-                     , binary
-                     , hexstring
-                     , base58string
-
-                     , aeson
-                     , lens
-                     , lens-aeson
-                     , unordered-containers
-                     , wreq
-
-                     , bitcoin-types
-                     , bitcoin-block
-                     , bitcoin-tx                     
-                     , bitcoin-script
-
-test-suite test-suite
-  type:                exitcode-stdio-1.0
-  ghc-options:         -Wall -ferror-spans -threaded -auto-all -caf-all -fno-warn-type-defaults
-  default-language:    Haskell2010
-  hs-source-dirs:      test
-  main-is:             Main.hs
-
-  other-modules:       Network.Bitcoin.Api.TestUtil
-                       Network.Bitcoin.Api.ClientSpec
-                       Network.Bitcoin.Api.BlockchainSpec
-                       Network.Bitcoin.Api.MiningSpec                       
-                       Network.Bitcoin.Api.WalletSpec                       
-                       Network.Bitcoin.Api.DumpSpec
-                       Network.Bitcoin.Api.MiscSpec                       
-                       Spec
-                       Main
-
-  build-depends:       base                     >= 4.3          && < 5
-                     , bytestring
-                     , text
-                     , base58string
-
-                     , http-client
-                     , wreq                     
-                     , lens
-                                          
-                     , hspec
-                     
-                     , bitcoin-tx
-                     , bitcoin-script
-                     , bitcoin-api
+data-files:
+    LICENSE
+    README.md
 
 source-repository head
   type: git
   location: git://github.com/solatis/haskell-bitcoin-api.git
-  branch: master
+
+library
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -ferror-spans
+  default-language: Haskell2010
+  exposed-modules:
+      Network.Bitcoin.Api.Client
+      Network.Bitcoin.Api.Types
+      Network.Bitcoin.Api.Types.UnspentTransaction
+      Network.Bitcoin.Api.Types.TxInfo
+      Network.Bitcoin.Api.Types.UnspentTxOut
+      Network.Bitcoin.Api.Types.HeaderInfo
+      Network.Bitcoin.Api.Blockchain
+      Network.Bitcoin.Api.Dump
+      Network.Bitcoin.Api.Mining
+      Network.Bitcoin.Api.Misc
+      Network.Bitcoin.Api.Transaction
+      Network.Bitcoin.Api.Wallet
+      Network.Bitcoin.Api.UTXO
+  other-modules:
+      Network.Bitcoin.Api.Internal
+      Paths_bitcoin_api
+  build-depends:
+      base >=4.3 && <5
+    , text
+    , bytestring
+    , base58string
+    , lens
+    , wreq
+    , bitcoin-tx
+    , bitcoin-script
+    , http-client
+    , binary
+    , hexstring
+    , aeson
+    , lens-aeson
+    , unordered-containers
+    , exceptions
+    , bitcoin-types
+    , bitcoin-block
+    , http-types
+
+test-suite test-suite
+  type: exitcode-stdio-1.0
+  ghc-options: -Wall -ferror-spans -threaded -auto-all -caf-all -fno-warn-type-defaults
+  default-language: Haskell2010
+  hs-source-dirs:
+      test
+  main-is: Main.hs
+  other-modules:
+      Network.Bitcoin.Api.BlockchainSpec
+      Network.Bitcoin.Api.ClientSpec
+      Network.Bitcoin.Api.DumpSpec
+      Network.Bitcoin.Api.MiningSpec
+      Network.Bitcoin.Api.MiscSpec
+      Network.Bitcoin.Api.TestUtil
+      Network.Bitcoin.Api.TransactionSpec
+      Network.Bitcoin.Api.WalletSpec
+      Spec
+  build-depends:
+      base >=4.3 && <5
+    , text
+    , bytestring
+    , base58string
+    , lens
+    , wreq
+    , bitcoin-tx
+    , bitcoin-script
+    , http-client
+    , hspec
+    , bitcoin-api

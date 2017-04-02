@@ -1,7 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell   #-}
 
-module Network.Bitcoin.Api.Misc where
+module Network.Bitcoin.Api.Misc
+(
+    module Network.Bitcoin.Api.Misc
+  , I.callRaw
+)
+where
 
 import           Control.Applicative          ((<$>), (<*>))
 import           Control.Lens.TH              (makeLenses)
@@ -87,3 +92,4 @@ instance FromJSON BitcoinInfo where
 getInfo :: T.Client -> IO BitcoinInfo
 getInfo client =
   I.call client "getinfo" emptyArray
+

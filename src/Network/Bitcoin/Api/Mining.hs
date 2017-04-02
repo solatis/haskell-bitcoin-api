@@ -3,6 +3,7 @@
 module Network.Bitcoin.Api.Mining where
 
 import           Data.Aeson
+import           Data.Maybe
 
 import qualified Data.Bitcoin.Block             as Btc
 
@@ -18,4 +19,4 @@ generate client blocks =
   let configuration = [toJSON True, toJSON blocks]
   in do
     hashes <- I.call client "setgenerate" configuration
-    mapM (Blockchain.getBlock client) hashes
+    catMaybes <$> mapM (Blockchain.getBlock client) hashes
