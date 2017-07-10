@@ -1,6 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Network.Bitcoin.Api.Internal where
+module Network.Bitcoin.Api.Internal
+( RpcResult(..)
+, RpcError(..)
+, callRaw
+, call
+, callMaybe
+)
+where
 
 import           Control.Lens              ((^.))
 import           Control.Monad             (mzero)
@@ -108,7 +115,6 @@ catchNotFound cmd = do
     case resE of
       Right res -> return $ Just res
       Left  err -> if errCode err == -5 then return Nothing else E.throwM err
-
 
 {-
 StatusCodeException

@@ -2,9 +2,9 @@
 {-# LANGUAGE TemplateHaskell   #-}
 
 module Network.Bitcoin.Api.Misc
-(
-    module Network.Bitcoin.Api.Misc
-  , I.callRaw
+( module Network.Bitcoin.Api.Misc
+, I.callRaw
+, I.RpcError(..)
 )
 where
 
