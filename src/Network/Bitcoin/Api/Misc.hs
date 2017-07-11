@@ -18,6 +18,7 @@ import qualified Data.Text                    as T
 
 import qualified Network.Bitcoin.Api.Internal as I
 import qualified Network.Bitcoin.Api.Types    as T
+import qualified Data.Bitcoin.Types           as BT
 
 data BitcoinInfo = BitcoinInfo {
 
@@ -93,3 +94,9 @@ getInfo :: T.Client -> IO BitcoinInfo
 getInfo client =
   I.call client "getinfo" emptyArray
 
+-- | Estimate transaction fee (in bitcoins per kilobyte) needed to
+--    get a transaction confirmed within specified number of blocks.
+--   Note: only works for num_blocks >= 2
+estimateFee :: T.Client -> Integer -> IO BT.Btc
+estimateFee client maxBlocks =
+  I.call client "estimatefee" [toJSON maxBlocks]
