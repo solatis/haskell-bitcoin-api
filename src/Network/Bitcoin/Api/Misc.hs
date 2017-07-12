@@ -99,4 +99,7 @@ getInfo client =
 --   Note: only works for num_blocks >= 2
 estimateFee :: T.Client -> Integer -> IO BT.Btc
 estimateFee client maxBlocks =
-  I.call client "estimatefee" [toJSON maxBlocks]
+  -- Block number >= 2 && <= 25
+  let capMaxBlks rawNum = max 2 (min 25 rawNum) in
+  I.call client "estimatefee" [toJSON $ capMaxBlks maxBlocks]
+
