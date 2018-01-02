@@ -32,7 +32,7 @@ data BitcoinInfo = BitcoinInfo {
   _walletVersion        :: Integer,
 
   -- | How much money is currently in the wallet?
-  _balance              :: Integer,
+  _balance              :: BT.Btc,
 
   -- | The number of blocks in our chain.
   _numBlocks            :: Integer,
