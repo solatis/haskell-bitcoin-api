@@ -15,7 +15,7 @@ import qualified Network.Wreq              as W
 import qualified Network.Wreq.Session      as WS
 
 import qualified Control.Monad.Catch       as E
-import           Network.HTTP.Client       (HttpException (..))
+import           Network.HTTP.Client       (HttpException (..), HttpExceptionContent (..))
 
 import           Data.Aeson
 import qualified Data.HashMap.Strict       as HM
