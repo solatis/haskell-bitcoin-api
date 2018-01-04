@@ -15,7 +15,7 @@ import qualified Network.Wreq              as W
 import qualified Network.Wreq.Session      as WS
 
 import qualified Control.Monad.Catch       as E
-import           Network.HTTP.Client       (HttpException (..), HttpExceptionContent (..))
+import           Network.HTTP.Client       (HttpException (..), HttpExceptionContent (..), responseHeaders)
 
 import           Data.Aeson
 import qualified Data.HashMap.Strict       as HM
@@ -89,9 +89,9 @@ call client method params =
                 command
         case rE of
           Right r -> return (r ^. W.responseBody)
-          Left ex@(StatusCodeException _ hdrL _) ->
+          Left ex@(HttpExceptionRequest _ (StatusCodeException response _) ) ->
             throwNothing (hdrM >>= decode . BL.fromStrict)
-                where hdrM = lookup "X-Response-Body-Start" hdrL
+                where hdrM = lookup "X-Response-Body-Start" $ responseHeaders response
                       throwNothing = maybe (E.throwM (ex :: HttpException)) return
           Left ex -> E.throwM (ex :: HttpException)
 
