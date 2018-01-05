@@ -76,19 +76,10 @@ call :: ( ToJSON a
      -> a        -- ^ The parameters we wish to provide
      -> IO b     -- ^ The result that was returned
 call client method params =
-  let command = object [ "jsonrpc" .= T.pack "2.0"
-                       , "method"  .= T.pack method
-                       , "params"  .= params
-                       , "id"      .= (1 :: Int)]
-
-      call' = do
-        rE <- E.try $ W.asJSON =<< WS.postWith
-                (T.clientOpts client)
-                (T.clientSession client)
-                (T.clientUrl client)
-                command
+  let call' = do
+        rE <- E.try $ callRaw client method params
         case rE of
-          Right r -> return (r ^. W.responseBody)
+          Right bs -> either (E.throwM . W.JSONError) return (eitherDecode bs)
           Left ex@(HttpExceptionRequest _ (StatusCodeException response _) ) ->
             throwNothing (hdrM >>= decode . BL.fromStrict)
                 where hdrM = lookup "X-Response-Body-Start" $ responseHeaders response
